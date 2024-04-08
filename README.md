@@ -1,7 +1,7 @@
-#Projekt 
+# Projekt 
 
 
-- tutoirali:
+## Tutoriali:
 How to push android studio project to github in 2022
 
 (https://www.youtube.com/watch?v=XIHNxES2hbQ)
