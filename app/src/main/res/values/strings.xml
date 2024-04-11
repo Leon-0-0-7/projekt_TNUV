@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">projekt-TNUV-1</string>
     <string name="the_future_of_finance_is_here">The future is HERE!</string>
+    <string name="scan">Create plan</string>
+    <string name="app_name">app_name</string>
 </resources>
