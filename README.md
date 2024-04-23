@@ -1,4 +1,4 @@
-# Financial assistant app
+# Financial assistant app - CashSensei
 
 ## Pages
 - [ ] main page -> "Create plan"
