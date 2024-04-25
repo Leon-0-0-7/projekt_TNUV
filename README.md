@@ -1,9 +1,14 @@
 # Financial assistant app - CashSensei
 
 ## Pages
-- [ ] main page -> "Create plan"
-- [ ] questionnaire -> age, budget, time span, risk level, asset classes, custom percentages
+## [ ] main page -> "Create plan"
+- [ ] questionnaire -> age, budget, time span zapakiran v finančni cilj (glej spodaj)
 - [ ] plan page —> dropdown with options(risk, time span), list with assets (current + target)
+### Time span
+- pokojnina
+- nakup avta
+- telefon čez dva meseca
+
 
 ## [Figma](https://www.figma.com/file/R1OqUWKKdN9H1ydhyqyGeF/Finance-Era%3A-Financial-Management-Mobile-App-(Community)?type=design&node-id=0-1&mode=design&t=JQ6s5jMKwHiMR6w2-0)
 ## Tutoriali:
