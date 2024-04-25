@@ -13,6 +13,7 @@
 risk level, asset classes, custom percentages
 
 ### Plan page —> dropdown with options(risk, time span), list with assets (current + target)
+- Sidebar menu with portfolios/plans (list plans with option to create new with same function as "Create plan" button)
 
 ## [Figma](https://www.figma.com/file/R1OqUWKKdN9H1ydhyqyGeF/Finance-Era%3A-Financial-Management-Mobile-App-(Community)?type=design&node-id=0-1&mode=design&t=JQ6s5jMKwHiMR6w2-0)
 ## Tutoriali:
