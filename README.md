@@ -16,6 +16,10 @@ risk level, asset classes, custom percentages
 - Sidebar menu with portfolios/plans (list plans with option to create new with same function as "Create plan" button)
 
 ## [Figma](https://www.figma.com/file/R1OqUWKKdN9H1ydhyqyGeF/Finance-Era%3A-Financial-Management-Mobile-App-(Community)?type=design&node-id=0-1&mode=design&t=JQ6s5jMKwHiMR6w2-0)
+
+## graf - lucijd charts
+https://lucid.app/lucidchart/08e65580-6f88-4b83-9cfc-be73d8066c9c/edit?viewport_loc=-1134%2C-515%2C4039%2C1978%2C0_0&invitationId=inv_1134d149-1892-4881-a2c2-86d2e598ef45
+
 ## Tutoriali:
 How to push android studio project to github in 2022
 
