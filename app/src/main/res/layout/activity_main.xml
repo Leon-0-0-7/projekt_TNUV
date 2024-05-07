@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".MainActivity"
-    android:background="@color/lightbrown"
+    android:background="@color/ozadje"
     >
 
     <ImageView
@@ -36,6 +36,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/scan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/create_portolio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/napis_create_portfolio"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
