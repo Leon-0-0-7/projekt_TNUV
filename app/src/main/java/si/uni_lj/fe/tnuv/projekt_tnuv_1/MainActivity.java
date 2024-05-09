@@ -14,13 +14,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button gumb_create_portfolio=findViewById(R.id.create_portolio);
-        gumb_create_portfolio.setOnClickListener(new View.OnClickListener() {
+        Button btn_create_plan=findViewById(R.id.btn_create_plan);
+        btn_create_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this, PortfolioActivity.class);
+                Intent intent=new Intent(MainActivity.this, QuizActivity.class);
                 startActivity(intent);
-
             }
         });
 

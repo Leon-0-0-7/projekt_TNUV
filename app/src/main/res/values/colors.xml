@@ -4,4 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lightbrown">#EEE4B1</color>
     <color name="ozadje">#ECEEF6</color>
+    <color name="lightblue">#00C1C1</color>
+    <color name="darkblue">#30437A</color>
+    <color name="btn_bg_light_mode">#30437A</color>
+    <color name="btn_bg_light_mode_focused">#455687</color>
+    <color name="btn_text_light_mode">#FFFFFFFF</color>
+    <color name="text_light_gray">#8791B0</color>
 </resources>
