@@ -3,6 +3,16 @@
     <style name="Base.Theme.ProjektTNUV1" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:textViewStyle">@style/PoppinsTextViewStyle</item>
+        <item name="android:buttonStyle">@style/PoppinsButtonStyle</item>
+    </style>
+
+    <style name="PoppinsTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="PoppinsButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/poppins</item>
     </style>
 
     <style name="Theme.ProjektTNUV1" parent="Base.Theme.ProjektTNUV1" />
