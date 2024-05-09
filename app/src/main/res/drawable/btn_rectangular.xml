@@ -4,14 +4,14 @@
     <item android:state_pressed="true">
         <shape>
             <solid android:color="@color/btn_bg_light_mode_focused" />
-            <corners android:radius="10dp" />
+            <corners android:radius="5dp" />
         </shape>
     </item>
     <!-- Button default state -->
     <item>
         <shape>
             <solid android:color="@color/btn_bg_light_mode" />
-            <corners android:radius="10dp" />
+            <corners android:radius="5dp" />
         </shape>
     </item>
 </selector>
