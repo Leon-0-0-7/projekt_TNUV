@@ -19,11 +19,13 @@ import java.util.List;
 
 public class PortfolioActivity extends AppCompatActivity {
     String[] assets = {"Stocks", "Precious metals", "Crypto", "Cash"};
-    String[] items = {"Risky", "Moderate", "Conservative", "W. Buffet"};
-    int[] percentage = {5000, 2500, 2500, 500};
+    String[] portfolio_options = {"Risky", "Moderate", "Conservative", "W. Buffet"};
 
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
+    List<DataEntry> dataEntries = new ArrayList<>();
+    int[] percentage = new int[4];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,55 +33,49 @@ public class PortfolioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_portfolio);
 
         autoCompleteText = findViewById(R.id.auto_complete_text);
-        adapterItems = new ArrayAdapter<>(this, R.layout.list_item, items);
+        adapterItems = new ArrayAdapter<>(this, R.layout.list_item, portfolio_options);
         autoCompleteText.setAdapter(adapterItems);
+        autoCompleteText.setText("Risky (Recommended)", false); //to be changed after getting results from quiz
 
-        // Set default value
-        autoCompleteText.setText("Recommended Portfolio", false); // can set to 'false' to avoid triggering item selection event
-
-        setupPieChart("Risky");
-
+        final Pie pie = AnyChart.pie();
+        AnyChartView anyChartView = findViewById(R.id.any_chart_view);
+        setChartData("Risky", pie);  //to be changed after getting results from quiz
+        anyChartView.setChart(pie);
 
         autoCompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, android.view.View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(), "Selected "+item+" portfolio.", Toast.LENGTH_SHORT).show();
-                setupPieChart(item);
+                String selected_item_from_dd_menu = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getApplicationContext(), "Selected " + selected_item_from_dd_menu + " portfolio.", Toast.LENGTH_SHORT).show();
+                setChartData(selected_item_from_dd_menu, pie);
             }
         });
 
     }
-    public void setupPieChart(String selected_item) {
-        AnyChartView anyChartView = findViewById(R.id.any_chart_view);
-        Pie pie = AnyChart.pie();
+
+    private void setChartData(String selected_item_from_dd_menu, Pie pie) {
         List<DataEntry> dataEntries = new ArrayList<>();
-        switch (selected_item) {
+
+        switch (selected_item_from_dd_menu) {
             case "Risky":
-                percentage = new int[]{7000, 1000, 1000, 1000};
+                percentage = new int[]{70, 10, 10, 10};
                 break;
             case "Moderate":
-                percentage = new int[]{5000, 2000, 1000, 0};
+                percentage = new int[]{50, 20, 10, 10};
                 break;
             case "Conservative":
-                percentage = new int[]{5000, 2500, 2500, 0};
+                percentage = new int[]{50, 25, 25, 10};
                 break;
             case "W. Buffet":
-                percentage = new int[]{4000, 3000, 3000, 0};
+                percentage = new int[]{40, 30, 30, 10};
                 break;
         }
-        for (int i = 0; i < assets.length; i++){
-            dataEntries.add(new ValueDataEntry(assets[i], percentage[i]));
 
+        for (int i = 0; i < assets.length; i++) {
+            dataEntries.add(new ValueDataEntry(assets[i], percentage[i]));
         }
         pie.data(dataEntries);
         pie.legend(false);
-        pie.legend().itemsLayout("verticalExpandable");
-        pie.legend().position("bottom");
-        pie.legend().align("left");
         pie.background().fill("#ECEEF6");
-        pie.innerRadius("30%");
-        anyChartView.setChart(pie);
     }
 }
-
