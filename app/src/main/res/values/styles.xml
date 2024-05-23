@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Custom style for the TextInputLayout -->
+    <!-- THIS FILE IS NOT NEEDED ANYMORE, AS WE USE STYLE DIRECTL IN activity_portfolio.xml Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu -->
     <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/poppins</item>
         <item name="endIconTint">@color/white</item>
-        <item name="iconGravity">textEnd</item>
         <item name="android:gravity">center</item>
     </style>
 
@@ -13,7 +13,6 @@
     <style name="CustomAutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:background">@color/top_bar_blue</item>
-        <item name="endIconDrawable">@drawable/ic_arrow_drop_down</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:gravity">center</item>
     </style>

@@ -8,102 +8,125 @@
     tools:context=".PortfolioActivity"
     android:background="@color/ozadje"
     >
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        style="@style/CustomTextInputLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:backgroundTint="@color/top_bar_blue"
+            app:endIconTint="@color/white"
+            app:startIconDrawable="@drawable/ic_burger_menu_light_mode"
+            app:startIconTint="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/white"
+            android:gravity="center"
+            app:hintEnabled="false"> <!-- Disable hint -->
 
         <AutoCompleteTextView
             android:id="@+id/auto_complete_text"
+            style="@style/Widget.AppCompat.AutoCompleteTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/top_bar_blue"
+            android:textColor="@color/white"
+            android:textAlignment="center"
             android:inputType="none"
-            style="@style/CustomAutoCompleteTextView"/>
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.anychart.AnyChartView
         android:id="@+id/any_chart_view"
-        android:layout_width="275dp"
-        android:layout_height="247dp"
-        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="10dp"
         android:background="@color/ozadje"
-        app:layout_constraintBottom_toTopOf="@id/tableLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="wrap"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayout"
-        app:layout_constraintWidth_default="wrap" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
 
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="351dp"
         android:layout_height="wrap_content"
         android:stretchColumns="1"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/any_chart_view"
+        app:layout_constraintTop_toBottomOf="@+id/any_chart_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginTop="20dp"
+        >
 
         <TableRow>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 1, Col 1"/>
+                android:text="Row 1, Col 1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 1, Col 2"/>
+                android:text="Row 1, Col 2" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 1, Col 3"/>
+                android:text="Row 1, Col 3" />
         </TableRow>
 
         <TableRow>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 2, Col 1"/>
+                android:text="Row 2, Col 1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 2, Col 2"/>
+                android:text="Row 2, Col 2" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 2, Col 3"/>
+                android:text="Row 2, Col 3" />
         </TableRow>
 
         <TableRow>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 3, Col 1"/>
+                android:text="Row 3, Col 1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 3, Col 2"/>
+                android:text="Row 3, Col 2" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Row 3, Col 3"/>
+                android:text="Row 3, Col 3" />
         </TableRow>
     </TableLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,33 +15,43 @@ import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PortfolioActivity extends AppCompatActivity {
+
+    //prepare data for the pie chart and dropdown menu
     String[] assets = {"Stocks", "Precious metals", "Crypto", "Cash"};
-    String[] portfolio_options = {"Risky", "Moderate", "Conservative", "W. Buffet"};
+    //String[] portfolio_options = {"Risky", "Moderate", "Conservative", "W. Buffet"};
+    // Initialize portfolio options as a List
+    List<String> portfolioOptionsList = new ArrayList<>(Arrays.asList("Risky", "Moderate", "Conservative", "W. Buffet"));
+
+    int[] percentage = new int[4];
 
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
-    List<DataEntry> dataEntries = new ArrayList<>();
-    int[] percentage = new int[4];
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portfolio);
 
+        // set up the dropdown menu
         autoCompleteText = findViewById(R.id.auto_complete_text);
-        adapterItems = new ArrayAdapter<>(this, R.layout.list_item, portfolio_options);
+        adapterItems = new ArrayAdapter<>(this, R.layout.list_item, portfolioOptionsList);
         autoCompleteText.setAdapter(adapterItems);
+
+        // Modify the specific element
+        portfolioOptionsList.set(0, "Risky (Recommended)");
         autoCompleteText.setText("Risky (Recommended)", false); //to be changed after getting results from quiz
 
+        // set up the pie chart
         final Pie pie = AnyChart.pie();
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         setChartData("Risky", pie);  //to be changed after getting results from quiz
         anyChartView.setChart(pie);
 
+        // set up the dropdown menu listener - when an item is selected, update the pie chart
         autoCompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, android.view.View view, int position, long id) {
@@ -55,7 +65,6 @@ public class PortfolioActivity extends AppCompatActivity {
 
     private void setChartData(String selected_item_from_dd_menu, Pie pie) {
         List<DataEntry> dataEntries = new ArrayList<>();
-
         switch (selected_item_from_dd_menu) {
             case "Risky":
                 percentage = new int[]{70, 10, 10, 10};
@@ -76,6 +85,7 @@ public class PortfolioActivity extends AppCompatActivity {
         }
         pie.data(dataEntries);
         pie.legend(false);
+        pie.innerRadius(30);
         pie.background().fill("#ECEEF6");
     }
 }
