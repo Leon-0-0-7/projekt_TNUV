@@ -1,0 +1,58 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="2dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="5dp"
+    android:background="@color/ozadje"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        >
+
+        <TextView
+            android:id="@+id/tvAsset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Asset"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvTargetValue" />
+
+        <TextView
+            android:id="@+id/tvTargetValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:hint="Target Value"
+            android:gravity="center"
+            android:fontFamily="@font/poppins"
+            app:layout_constraintStart_toEndOf="@id/tvAsset"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/etCurrentValue" />
+
+        <EditText
+            android:id="@+id/etCurrentValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textSize="16sp"
+            android:hint="Current Value"
+            android:gravity="center"
+            android:fontFamily="@font/poppins"
+            app:layout_constraintStart_toEndOf="@id/tvTargetValue"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

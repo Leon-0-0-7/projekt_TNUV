@@ -1,6 +1,8 @@
 package si.uni_lj.fe.tnuv.projekt_tnuv_1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.AdapterView;
@@ -31,10 +33,24 @@ public class PortfolioActivity extends AppCompatActivity {
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
 
+    // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
+    ArrayList<AssetModel> assetModels = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portfolio);
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        // Set up the AssetModels
+        SetUpAssetModels();
+
+        // Create an instance of the AM_RecyclerViewAdapter and pass the context
+        AM_RecyclerViewAdapter am_recyclerViewAdapter = new AM_RecyclerViewAdapter(this, assetModels);
+
+        // Set the adapter to the recycler view
+        recyclerView.setAdapter(am_recyclerViewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // set up the dropdown menu
         autoCompleteText = findViewById(R.id.auto_complete_text);
@@ -87,5 +103,15 @@ public class PortfolioActivity extends AppCompatActivity {
         pie.legend(false);
         pie.innerRadius(30);
         pie.background().fill("#ECEEF6");
+    }
+
+    private void SetUpAssetModels() {
+
+        //lahko bi si naredil v values strings.xml in tam shranil vrednosti
+        // Add the AssetModel objects to the assetModels ArrayList
+        assetModels.add(new AssetModel("Stocks", 70, 0));
+        assetModels.add(new AssetModel("Precious metals", 10, 10));
+        assetModels.add(new AssetModel("Crypto", 10, 50));
+        assetModels.add(new AssetModel("Cash", 10, 40));
     }
 }
