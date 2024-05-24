@@ -73,10 +73,10 @@
         app:layout_constraintWidth_percent="0.33" />
 
     <TextView
-        android:id="@+id/header_current_percent"
+        android:id="@+id/header_target_percent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Current %"
+        android:text="Target %"
         android:textSize="16sp"
         android:textStyle="bold"
         android:fontFamily="@font/poppins"
@@ -91,10 +91,10 @@
         app:layout_constraintWidth_percent="0.33" />
 
     <TextView
-        android:id="@+id/header_target_percent"
+        android:id="@+id/header_current_percent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Target %"
+        android:text="Current %"
         android:textSize="16sp"
         android:textStyle="bold"
         android:fontFamily="@font/poppins"
@@ -103,7 +103,7 @@
         android:paddingTop="7dp"
         android:paddingEnd="0dp"
         android:paddingStart="0dp"
-        app:layout_constraintStart_toEndOf="@id/header_current_percent"
+        app:layout_constraintStart_toEndOf="@id/header_target_percent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/any_chart_view"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
@@ -111,13 +111,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:layout_marginTop="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/header_target_percent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_current_percent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/ozadje"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
