@@ -55,78 +55,69 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
 
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="351dp"
+    <TextView
+        android:id="@+id/header_asset"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:stretchColumns="1"
+        android:text="Asset"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins"
+        android:paddingStart="10dp"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/any_chart_view"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintWidth_percent="0.33" />
+
+    <TextView
+        android:id="@+id/header_target_percent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Target %"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        app:layout_constraintStart_toEndOf="@id/header_asset"
+        app:layout_constraintTop_toBottomOf="@+id/any_chart_view"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintWidth_percent="0.33" />
+
+    <TextView
+        android:id="@+id/header_current_percent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Current %"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        app:layout_constraintStart_toEndOf="@id/header_target_percent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/any_chart_view"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintWidth_percent="0.33" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/header_target_percent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        >
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 1, Col 1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 1, Col 2" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 1, Col 3" />
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 2, Col 1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 2, Col 2" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 2, Col 3" />
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 3, Col 1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 3, Col 2" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Row 3, Col 3" />
-        </TableRow>
-    </TableLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/ozadje"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
