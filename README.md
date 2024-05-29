@@ -1,5 +1,9 @@
 # Financial assistant app - CashSensei
-
+## TO DO
+- on resume
+- database (shranjevanje portfelja) -> firebase
+- burger menu
+- dinamično generiranje vprašanj
 ## Pages
 ### Main page -> "Create plan"
 
