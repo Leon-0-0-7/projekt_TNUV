@@ -1,10 +1,17 @@
 package si.uni_lj.fe.tnuv.projekt_tnuv_1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -15,18 +22,19 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 public class PortfolioActivity extends AppCompatActivity {
 
-    //prepare data for the pie chart and dropdown menu
-    String[] assets = {"Stocks", "Precious metals", "Crypto", "Cash"};
+    //  Prepare data for the pie chart and dropdown menu
+    String[] assets = {"Stocks", "Precious metals", "Crypto", "Cash"};  // TODO: Use database to get assets
     //String[] portfolio_options = {"Risky", "Moderate", "Conservative", "W. Buffet"};
     // Initialize portfolio options as a List
-    List<String> portfolioOptionsList = new ArrayList<>(Arrays.asList("Risky", "Moderate", "Conservative", "W. Buffet", "C. Wood"));
+    List<String> portfolioOptionsList = new ArrayList<>(Arrays.asList("Risky", "Moderate", "Conservative", "W. Buffet", "C. Wood"));  // TODO: Use database to get portfolio options
 
     int[] percentage = new int[4];
 
@@ -36,15 +44,21 @@ public class PortfolioActivity extends AppCompatActivity {
     // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
     ArrayList<AssetModel> assetModels = new ArrayList<>();
 
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_portfolio);
+        setContentView(R.layout.nav_portfolio_activity);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         // Set up the AssetModels
-        SetUpAssetModels("Risky"); // To be changed after getting results from quiz
+        SetUpAssetModels("Risky"); // TODO: To be changed after getting results from quiz
 
         // Create an instance of the AM_RecyclerViewAdapter and pass the context
         AM_RecyclerViewAdapter am_recyclerViewAdapter = new AM_RecyclerViewAdapter(this, assetModels);
@@ -59,13 +73,13 @@ public class PortfolioActivity extends AppCompatActivity {
         autoCompleteText.setAdapter(adapterItems);
 
         // Modify the specific element
-        portfolioOptionsList.set(0, "Risky (Recommended)");  // not handled in recycler view yet
-        autoCompleteText.setText("Risky (Recommended)", false); //  To be changed after getting results from quiz
+        portfolioOptionsList.set(0, "Risky (Recommended)");  // TODO: not handled in recycler view yet
+        autoCompleteText.setText("Risky (Recommended)", false); //  TODO: To be changed after getting results from quiz
 
         // set up the pie chart
         final Pie pie = AnyChart.pie();
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
-        setChartData("Risky", pie);  //to be changed after getting results from quiz
+        setChartData("Risky", pie);  //  TODO: to be changed after getting results from quiz
         anyChartView.setChart(pie);
 
         // set up the dropdown menu listener - when an item is selected, update the pie chart
@@ -77,12 +91,62 @@ public class PortfolioActivity extends AppCompatActivity {
                 setChartData(selected_item_from_dd_menu, pie);
 
                 // Update the asset models
-                SetUpAssetModels2(selected_item_from_dd_menu,am_recyclerViewAdapter);
+                SetUpAssetModels2(selected_item_from_dd_menu, am_recyclerViewAdapter);
+            }
+        });
+
+        // Handle navigation view item clicks
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.nav_about_app) {
+                    // Retrieve the app version from BuildConfig
+
+                    PackageInfo pInfo = null;
+                    try {
+                        pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String version = pInfo.versionName;//Version Name
+                    int verCode = pInfo.versionCode;//Version Code
+                    String message = "App version " + version + "\nCode version: " + verCode;
+
+                    // Display the Toast message with longer duration
+                    Toast.makeText(PortfolioActivity.this, message, Toast.LENGTH_LONG).show();
+                    return true;
+
+                } else if (id == R.id.nav_home) {
+                    // Handle the home action
+                    // Start Main Activity
+                    Intent intent = new Intent(PortfolioActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else if (id == R.id.nav_portfolio_1) { // TODO: Change to dynamic portfolio handling
+                    // Show right portfolio
+                    Toast.makeText(PortfolioActivity.this, "Portfolio 1", Toast.LENGTH_SHORT).show();
+                }
+
+                drawerLayout.closeDrawer(navigationView);
+                return true;
+            }
+        });
+
+        TextInputLayout textInputLayout = findViewById(R.id.textInputLayout);
+        textInputLayout.setStartIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawerLayout.isDrawerOpen(navigationView)) {
+                    drawerLayout.closeDrawer(navigationView);
+                } else {
+                    drawerLayout.openDrawer(navigationView);
+                }
             }
         });
     }
 
-    private List<String> getAssets(String selected_item_from_dd_menu) {
+    private List<String> getAssets(String selected_item_from_dd_menu) {  // TODO: Use database to get assets
         switch (selected_item_from_dd_menu) {
             case "Conservative":
                 return Arrays.asList("Bonds", "Real Estate", "Cash", "Precious metals");
@@ -94,7 +158,7 @@ public class PortfolioActivity extends AppCompatActivity {
                 return Arrays.asList("Stocks", "Precious metals", "Crypto", "Cash"); // Default assets
         }
     }
-    private int[] getAllocation(String selected_item_from_dd_menu) {
+    private int[] getAllocation(String selected_item_from_dd_menu) { // TODO: Use database to get allocation
         switch (selected_item_from_dd_menu) {
             case "Risky":
                 return new int[]{70, 10, 10, 10};
