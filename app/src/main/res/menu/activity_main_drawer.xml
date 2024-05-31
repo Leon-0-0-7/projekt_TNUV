@@ -12,6 +12,7 @@
             android:id="@+id/nav_portfolio_1"
             android:icon="@drawable/ic_menu_pie"
             android:title="@string/menu_portfilo_name" />
+        <!-- TODO: Change to dynamic portfolio handling -->
         <item
             android:id="@+id/nav_about_app"
             android:icon="@drawable/ic_menu_settings"

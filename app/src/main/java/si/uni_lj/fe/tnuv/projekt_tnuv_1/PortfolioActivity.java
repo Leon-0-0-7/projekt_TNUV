@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,11 +30,11 @@ import java.util.Arrays;
 import java.util.List;
 public class PortfolioActivity extends AppCompatActivity {
 
-    //prepare data for the pie chart and dropdown menu
-    String[] assets = {"Stocks", "Precious metals", "Crypto", "Cash"};
+    //  Prepare data for the pie chart and dropdown menu
+    String[] assets = {"Stocks", "Precious metals", "Crypto", "Cash"};  // TODO: Use database to get assets
     //String[] portfolio_options = {"Risky", "Moderate", "Conservative", "W. Buffet"};
     // Initialize portfolio options as a List
-    List<String> portfolioOptionsList = new ArrayList<>(Arrays.asList("Risky", "Moderate", "Conservative", "W. Buffet", "C. Wood"));
+    List<String> portfolioOptionsList = new ArrayList<>(Arrays.asList("Risky", "Moderate", "Conservative", "W. Buffet", "C. Wood"));  // TODO: Use database to get portfolio options
 
     int[] percentage = new int[4];
 
@@ -59,7 +58,7 @@ public class PortfolioActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         // Set up the AssetModels
-        SetUpAssetModels("Risky"); // To be changed after getting results from quiz
+        SetUpAssetModels("Risky"); // TODO: To be changed after getting results from quiz
 
         // Create an instance of the AM_RecyclerViewAdapter and pass the context
         AM_RecyclerViewAdapter am_recyclerViewAdapter = new AM_RecyclerViewAdapter(this, assetModels);
@@ -74,13 +73,13 @@ public class PortfolioActivity extends AppCompatActivity {
         autoCompleteText.setAdapter(adapterItems);
 
         // Modify the specific element
-        portfolioOptionsList.set(0, "Risky (Recommended)");  // not handled in recycler view yet
-        autoCompleteText.setText("Risky (Recommended)", false); //  To be changed after getting results from quiz
+        portfolioOptionsList.set(0, "Risky (Recommended)");  // TODO: not handled in recycler view yet
+        autoCompleteText.setText("Risky (Recommended)", false); //  TODO: To be changed after getting results from quiz
 
         // set up the pie chart
         final Pie pie = AnyChart.pie();
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
-        setChartData("Risky", pie);  //to be changed after getting results from quiz
+        setChartData("Risky", pie);  //  TODO: to be changed after getting results from quiz
         anyChartView.setChart(pie);
 
         // set up the dropdown menu listener - when an item is selected, update the pie chart
@@ -124,6 +123,9 @@ public class PortfolioActivity extends AppCompatActivity {
                     // Start Main Activity
                     Intent intent = new Intent(PortfolioActivity.this, MainActivity.class);
                     startActivity(intent);
+                } else if (id == R.id.nav_portfolio_1) { // TODO: Change to dynamic portfolio handling
+                    // Show right portfolio
+                    Toast.makeText(PortfolioActivity.this, "Portfolio 1", Toast.LENGTH_SHORT).show();
                 }
 
                 drawerLayout.closeDrawer(navigationView);
@@ -144,7 +146,7 @@ public class PortfolioActivity extends AppCompatActivity {
         });
     }
 
-    private List<String> getAssets(String selected_item_from_dd_menu) {
+    private List<String> getAssets(String selected_item_from_dd_menu) {  // TODO: Use database to get assets
         switch (selected_item_from_dd_menu) {
             case "Conservative":
                 return Arrays.asList("Bonds", "Real Estate", "Cash", "Precious metals");
@@ -156,7 +158,7 @@ public class PortfolioActivity extends AppCompatActivity {
                 return Arrays.asList("Stocks", "Precious metals", "Crypto", "Cash"); // Default assets
         }
     }
-    private int[] getAllocation(String selected_item_from_dd_menu) {
+    private int[] getAllocation(String selected_item_from_dd_menu) { // TODO: Use database to get allocation
         switch (selected_item_from_dd_menu) {
             case "Risky":
                 return new int[]{70, 10, 10, 10};
