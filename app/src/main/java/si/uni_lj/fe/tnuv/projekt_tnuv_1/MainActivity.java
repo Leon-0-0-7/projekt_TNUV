@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser != null) {
             // User is signed in, navigate to the next activity
             Intent intent = new Intent(MainActivity.this, PortfolioActivity.class);
+//            Intent intent = new Intent(MainActivity.this, QuizActivity.class);
             startActivity(intent);
             finish();
         } else {

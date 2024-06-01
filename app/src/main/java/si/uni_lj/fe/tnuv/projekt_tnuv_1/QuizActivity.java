@@ -1,35 +1,50 @@
 package si.uni_lj.fe.tnuv.projekt_tnuv_1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * QuizActivity is an activity that presents a quiz to the user.
+ * The quiz questions are loaded from Firestore and presented one at a time.
+ * The user's answers are stored in a list and saved to Firestore when the quiz is completed.
+ */
 public class QuizActivity extends AppCompatActivity {
 
     private ProgressBar quizProgressBar;
     private TextView quizProgressText;
+    private int progress = 0;
+    private int numberOfQuestions;
+    private List<Integer> userInfo = new ArrayList<>();
     private TextView questionTextView;
     private Button confirmButton;
-    private Button answerButton1;
-    private Button answerButton2;
-    private Button answerButton3;
     private DatePicker datePick;
-    JSONObject user_json = new JSONObject();
+    private List<Question> questions = new ArrayList<>();
+
+    /**
+     * This method is called when the activity is starting.
+     * It initializes the activity and sets up the UI.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,130 +54,121 @@ public class QuizActivity extends AppCompatActivity {
         quizProgressText = findViewById(R.id.progressBarText);
         questionTextView = findViewById(R.id.quizQuestion);
         confirmButton = findViewById(R.id.btn_confirm);
-        answerButton1 = findViewById(R.id.btn_answer1);
-        answerButton2 = findViewById(R.id.btn_answer2);
-        answerButton3 = findViewById(R.id.btn_answer3);
         datePick = findViewById(R.id.birthDatePicker);
-        // Set up your quiz here. For example:
+
         questionTextView.setText("What is your birth date?");
+        // Load questions from Firestore
+        loadQuestionsfromFireStore();
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Handle confirm button click
                 // Update progress bar
-                quizProgressBar.setProgress(33);
+                quizProgressBar.setProgress(100 / (numberOfQuestions + 1));
 
                 // Hide the date picker and confirm button
                 datePick.setVisibility(View.GONE);
                 confirmButton.setVisibility(View.GONE);
+                // Add the user's birth date to the userInfo list
+                userInfo.add(datePick.getYear());
 
-                AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
-                fadeIn.setDuration(300);
-                // Show the answer buttons
-                answerButton1.startAnimation(fadeIn);
-                answerButton1.setVisibility(View.VISIBLE);
-                answerButton2.startAnimation(fadeIn);
-                answerButton2.setVisibility(View.VISIBLE);
-                answerButton3.startAnimation(fadeIn);
-                answerButton3.setVisibility(View.VISIBLE);
-
-                answerButton3.startAnimation(fadeIn);
                 quizProgressText.setText("Warming up!");
-                // Create an Intent to start PortfolioActivity
-//                Intent intent = new Intent(QuizActivity.this, PortfolioActivity.class);
-//                startActivity(intent);
-                saveUserData(user_json, "birth-year", datePick.getYear());
-                saveUserData(user_json, "birth-day", datePick.getDayOfMonth());
-                saveUserData(user_json, "birth-month", datePick.getMonth() + 1);
 
-            }
-        });
-        answerButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle answer button 1 click
-                // Update progress bar
-                quizProgressBar.setProgress(quizProgressBar.getProgress() + 10);
-
-                answerButton1.setText(getValueFromUserData("birth-year"));
-
-                // Check if progress bar is full
-                if (quizProgressBar.getProgress() >= 100) {
-                    // Start PortfolioActivity
-                    Intent intent = new Intent(QuizActivity.this, PortfolioActivity.class);
-                    startActivity(intent);
-                }
-
+                setQuestion(questions.get(0));
             }
         });
 
-        answerButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle answer button 2 click
-                // Update progress bar
-                quizProgressBar.setProgress(quizProgressBar.getProgress() + 10);
-                // Check if progress bar is full
-                if (quizProgressBar.getProgress() >= 100) {
-                    // Start PortfolioActivity
-                    Intent intent = new Intent(QuizActivity.this, PortfolioActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
+    }
 
-        answerButton3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle answer button 3 click
-                // Update progress bar
-                quizProgressBar.setProgress(quizProgressBar.getProgress() + 10);
-                // Check if progress bar is full
-                if (quizProgressBar.getProgress() >= 100) {
-                    // Start PortfolioActivity
-                    Intent intent = new Intent(QuizActivity.this, PortfolioActivity.class);
-                    startActivity(intent);
+    /**
+     * This method loads the quiz questions from Firestore.
+     * The questions are stored in a collection named "questions".
+     * Each document in the collection represents a question and has a "question" field and an "answers" field.
+     */
+    private void loadQuestionsfromFireStore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Array to store questions
+        questions = new ArrayList<>();
+
+        db.collection("questions").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot qs = task.getResult();
+                if (qs != null) {
+                    for (int i = 0; i < qs.size(); i++) {
+                        Question q = new Question();
+                        q.question = qs.getDocuments().get(i).getString("question");
+                        q.answers = (List<String>) qs.getDocuments().get(i).get("answers");
+                        questions.add(q);
+                        numberOfQuestions = qs.size();
+                    }
                 }
+                Toast.makeText(this, "Questions loaded", Toast.LENGTH_SHORT).show();
+            } else {
+                // Handle errors
+                Toast.makeText(this, "Failed to load questions", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public String getValueFromUserData(String key) {
-        String value = "";
-        try {
-            File file = new File(getFilesDir(), "user_data.json");
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            StringBuilder stringBuilder = new StringBuilder();
-            String line = bufferedReader.readLine();
-            while (line != null) {
-                stringBuilder.append(line).append("\n");
-                line = bufferedReader.readLine();
-            }
-            bufferedReader.close();
-            String jsonString = stringBuilder.toString();
+    /**
+     * This method sets the current question to be displayed in the UI.
+     * It creates a button for each answer and sets up a click listener for each button.
+     * When an answer button is clicked, the index of the answer is added to the userInfo list,
+     * the progress bar is updated, and the next question is set.
+     */
+    private void setQuestion(Question question) {
+        questionTextView.setText(question.question);
+        LinearLayout answers = findViewById(R.id.answersLayout);
+        answers.removeAllViews(); // Clear any existing answer buttons
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (int i = 0; i < question.answers.size(); i++) {
+            String answer = question.answers.get(i);
+            AppCompatButton answerButton = (AppCompatButton) inflater.inflate(R.layout.btn_answer, answers, false);
+            answerButton.setText(answer);
+            answerButton.setVisibility(View.VISIBLE);
+            final int finalI = i;
+            // Handle answer button click
+            answerButton.setOnClickListener(view -> {
+                userInfo.add(finalI);
+                if (progress == numberOfQuestions - 1) {
+                    // Last question
+                    // Create an Intent to start PortfolioActivity
+                    Intent intent = new Intent(QuizActivity.this, PortfolioActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(this, "Quiz completed:" + userInfo, Toast.LENGTH_SHORT).show();
+                    storeUserInfoToFiresStore();
+                    return;
+                }
+                quizProgressBar.setProgress((100 / (numberOfQuestions + 1)) * (progress + 2));
+                progress++;
+                setQuestion(questions.get(progress));
+            });
 
-            JSONObject jsonObject = new JSONObject(jsonString);
-            value = jsonObject.getString(key);
-
-            fileReader.close();
-        } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
-        }
-        return value;
-    }
-
-    public void saveUserData(JSONObject json, String key, int value) {
-        try {
-            json.put(key, value);
-            String jsonString = json.toString();
-            FileWriter fileWriter = new FileWriter(new File(getFilesDir(), "user_data.json"));
-            fileWriter.write(jsonString);
-            fileWriter.close();
-        } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
+            answers.addView(answerButton);
         }
     }
+
+    /**
+     * This method stores the user's answers to Firestore.
+     * The answers are stored in a document in the "users" collection.
+     * The ID of the document is the ID of the current user.
+     */
+    private void storeUserInfoToFiresStore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("userInfo", userInfo);
+
+        db.collection("users").document(userId).set(data).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, "User info stored", Toast.LENGTH_SHORT).show();
+            } else {
+                // Handle errors
+                Toast.makeText(this, "Failed to store user info", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
-
