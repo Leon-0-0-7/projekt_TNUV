@@ -1,11 +1,13 @@
 package si.uni_lj.fe.tnuv.projekt_tnuv_1;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,6 +26,7 @@ import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,6 +129,24 @@ public class PortfolioActivity extends AppCompatActivity {
                 } else if (id == R.id.nav_portfolio_1) { // TODO: Change to dynamic portfolio handling
                     // Show right portfolio
                     Toast.makeText(PortfolioActivity.this, "Portfolio 1", Toast.LENGTH_SHORT).show();
+                } else if(id == R.id.nav_logout){
+                    // Create an AlertDialog
+                    // TODO: Polepšati izgled AlertDialoga
+                    new AlertDialog.Builder(PortfolioActivity.this)
+                            .setTitle("Logout")
+                            .setMessage("Are you sure you want to logout?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Log out the user
+                                    FirebaseAuth.getInstance().signOut();
+                                    // Start Main Activity
+                                    Intent intent = new Intent(PortfolioActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 }
 
                 drawerLayout.closeDrawer(navigationView);
