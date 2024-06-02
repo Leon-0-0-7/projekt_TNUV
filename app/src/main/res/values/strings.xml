@@ -23,4 +23,7 @@
     <string name="password">Password</string>
     <string name="logout">Logout</string>
     <string name="loading">Loading...</string>
+    <string name="portfolio_asset">Asset</string>
+    <string name="portfolio_target">Target</string>
+    <string name="portfolio_current">Current</string>
 </resources>

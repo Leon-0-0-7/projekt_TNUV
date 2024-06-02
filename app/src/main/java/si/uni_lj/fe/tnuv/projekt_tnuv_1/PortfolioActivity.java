@@ -49,7 +49,7 @@ public class PortfolioActivity extends AppCompatActivity {
     AutoCompleteTextView autoCompleteText;
     // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
     ArrayList<AssetModel> assetModels = new ArrayList<>();
-
+    int budget = 10000;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private RecyclerView recyclerView;
@@ -215,18 +215,9 @@ public class PortfolioActivity extends AppCompatActivity {
         List<DataEntry> dataEntries = new ArrayList<>();
         String[] assets = selectedStrategy.keySet().toArray(new String[0]);
         int[] values = selectedStrategy.values().stream().mapToInt(i -> i).toArray();
-
-        // assign the remaining percetages to Cash or Other (if asset is not present in current strategy)
-        int total = 0;
-        int otherValue = 0;
-        for (Map.Entry<String, Integer> entry : userPortfolio.entrySet()) {
-            String asset = entry.getKey();
-            int value = entry.getValue();
-            if (!selectedStrategy.containsKey(asset) && !asset.equals("Cash")) {
-                otherValue += value;
-            } else if (!asset.equals("Cash")){ // Cash is not included in the total
-                total += value;
-            }
+        // convert values from percentages to absolute values
+        for (int i = 0; i < values.length; i++) {
+            values[i] = values[i] * budget / 100;
         }
 
         for (int i = 0; i < assets.length; i++) {
@@ -243,26 +234,14 @@ public class PortfolioActivity extends AppCompatActivity {
             assetModels.clear();
             for (int i = 0; i < assets.length; i++) {
                 int currentValue = userPortfolio.getOrDefault(assets[i], 0);
-                // TODO: MAKE THIS PRETTIER
-                if(assets[i].equals("Cash"))
-                    assetModels.add(new AssetModel(assets[i], values[i], 100 - total - otherValue));
-                else if(assets[i].equals("Other"))
-                    assetModels.add(new AssetModel(assets[i], values[i], otherValue));
-                else
-                    assetModels.add(new AssetModel(assets[i], values[i], currentValue));
+                assetModels.add(new AssetModel(assets[i], values[i], currentValue));
             }
             adapter.notifyDataSetChanged();
         }
         else{
             for (int i = 0; i < assets.length; i++) {
                 int currentValue = userPortfolio.getOrDefault(assets[i], 0);
-                // TODO: MAKE THIS PRETTIER
-                if(assets[i].equals("Cash"))
-                    assetModels.set(i, new AssetModel(assets[i], values[i], 100 - total - otherValue));
-                else if(assets[i].equals("Other"))
-                    assetModels.set(i, new AssetModel(assets[i], values[i], otherValue));
-                else
-                    assetModels.set(i, new AssetModel(assets[i], values[i], currentValue));
+                assetModels.get(i).setCurrentValue(currentValue);
                 adapter.notifyItemChanged(i);
             }
         }
