@@ -7,6 +7,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -37,8 +38,8 @@ public class PortfolioActivity extends AppCompatActivity {
     String[] assets = {"Stocks", "Precious metals", "Crypto", "Cash"};  // TODO: Use database to get assets
     //String[] portfolio_options = {"Risky", "Moderate", "Conservative", "W. Buffet"};
     // Initialize portfolio options as a List
-    List<String> portfolioOptionsList = new ArrayList<>(Arrays.asList("Risky", "Moderate", "Conservative", "W. Buffet", "C. Wood"));  // TODO: Use database to get portfolio options
-
+//    List<String> portfolioOptionsList = new ArrayList<>(Arrays.asList("Risky", "Moderate", "Conservative", "W. Buffet", "C. Wood"));  // TODO: Use database to get portfolio options
+    List<String> portfolioOptionsList = new ArrayList<>();
     int[] percentage = new int[4];
 
     AutoCompleteTextView autoCompleteText;
@@ -46,6 +47,8 @@ public class PortfolioActivity extends AppCompatActivity {
 
     // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
     ArrayList<AssetModel> assetModels = new ArrayList<>();
+    ArrayList<String> assetList = new ArrayList<>();
+    ArrayList<Integer> assetAllocationList = new ArrayList<>();
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -55,13 +58,19 @@ public class PortfolioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_portfolio_activity);
 
+        // Retrieve the fetched data from the Intent
+        Intent intent = getIntent();
+        String strategiesJson = intent.getStringExtra("strategies");
+//        Toast.makeText(this, strategiesJson, Toast.LENGTH_LONG).show();
+        // TODO: Parse the JSON string to get the portfolio options
+
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         // Set up the AssetModels
-        SetUpAssetModels("Risky"); // TODO: To be changed after getting results from quiz
+        SetUpAssetModels("risky"); // TODO: To be changed after getting results from quiz
 
         // Create an instance of the AM_RecyclerViewAdapter and pass the context
         AM_RecyclerViewAdapter am_recyclerViewAdapter = new AM_RecyclerViewAdapter(this, assetModels);
@@ -76,13 +85,13 @@ public class PortfolioActivity extends AppCompatActivity {
         autoCompleteText.setAdapter(adapterItems);
 
         // Modify the specific element
-        portfolioOptionsList.set(0, "Risky (Recommended)");  // TODO: not handled in recycler view yet
-        autoCompleteText.setText("Risky (Recommended)", false); //  TODO: To be changed after getting results from quiz
+//        portfolioOptionsList.set(0, "Risky (Recommended)");  // TODO: not handled in recycler view yet
+//        autoCompleteText.setText("Risky (Recommended)", false); //  TODO: To be changed after getting results from quiz
 
         // set up the pie chart
         final Pie pie = AnyChart.pie();
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
-        setChartData("Risky", pie);  //  TODO: to be changed after getting results from quiz
+        setChartData("risky", pie);  //  TODO: to be changed after getting results from quiz
         anyChartView.setChart(pie);
 
         // set up the dropdown menu listener - when an item is selected, update the pie chart
@@ -178,6 +187,8 @@ public class PortfolioActivity extends AppCompatActivity {
             default:
                 return Arrays.asList("Stocks", "Precious metals", "Crypto", "Cash"); // Default assets
         }
+        
+
     }
     private int[] getAllocation(String selected_item_from_dd_menu) { // TODO: Use database to get allocation
         switch (selected_item_from_dd_menu) {

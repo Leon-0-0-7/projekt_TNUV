@@ -3,6 +3,7 @@ package si.uni_lj.fe.tnuv.projekt_tnuv_1;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -23,6 +25,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.gson.Gson;
 
 /**
  * QuizActivity is an activity that presents a quiz to the user.
@@ -134,8 +138,7 @@ public class QuizActivity extends AppCompatActivity {
                 if (progress == numberOfQuestions - 1) {
                     // Last question
                     // Create an Intent to start PortfolioActivity
-                    Intent intent = new Intent(QuizActivity.this, PortfolioActivity.class);
-                    startActivity(intent);
+                    prefetchAndStartPortfolioActivity();
                     Toast.makeText(this, "Quiz completed:" + userInfo, Toast.LENGTH_SHORT).show();
                     storeUserInfoToFiresStore();
                     return;
@@ -167,6 +170,39 @@ public class QuizActivity extends AppCompatActivity {
             } else {
                 // Handle errors
                 Toast.makeText(this, "Failed to store user info", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    /**
+     * This method prefetches the data needed for the PortfolioActivity and starts the activity.
+     * The data is fetched from Firestore and stored in a list.
+     * The list is passed to the PortfolioActivity as an extra in the Intent.
+     */
+    // TODO: FINISH THIS FUNCTION
+    private void prefetchAndStartPortfolioActivity() {
+        Toast.makeText(this, "Fetching data...", Toast.LENGTH_SHORT).show();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("strategies").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                ArrayList<Map<String, Object>> allDocuments = new ArrayList<>();
+                for (DocumentSnapshot document : documents) {
+                    allDocuments.add(document.getData());
+                }
+
+                Gson gson = new Gson();
+                String json = gson.toJson(allDocuments);
+                // Once the data is fetched, start PortfolioActivity
+                Intent intent = new Intent(this, PortfolioActivity.class);
+                // Pass the fetched data to PortfolioActivity
+                intent.putExtra("strategies", json);
+//                intent.putStringArrayListExtra("assetAllocationList", new ArrayList<>(assetAllocationList));
+//                intent.putStringArrayListExtra("assetList", new ArrayList<>(assetList));
+                startActivity(intent);
+                finish();
+            } else {
+                // Handle the error
+                Toast.makeText(this, "Error fetching data", Toast.LENGTH_SHORT).show();
             }
         });
     }
