@@ -7,6 +7,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -49,6 +50,7 @@ public class PortfolioActivity extends AppCompatActivity {
     AutoCompleteTextView autoCompleteText;
     // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
     ArrayList<AssetModel> assetModels = new ArrayList<>();
+    // TODO: Add budget to question
     int budget = 10000;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -57,6 +59,7 @@ public class PortfolioActivity extends AppCompatActivity {
     private Pie pie;
     private AnyChartView anyChartView;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +79,13 @@ public class PortfolioActivity extends AppCompatActivity {
 
         // TODO: Use quiz results to determine the default portfolio option
         if(!portfolioStrategiesList.isEmpty()){
+            String chosenPortfolio = "Risky";
+            int recommended = portfolioStrategiesList.indexOf(chosenPortfolio);
+
+            portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
             // Default to the first portfolio option
             Map<String, Integer> selectedStrategy = strategiesMap.get(portfolioStrategiesList.get(0));
-            autoCompleteText.setText(portfolioStrategiesList.get(0), false);
+            autoCompleteText.setText(portfolioStrategiesList.get(recommended), false);
             assert selectedStrategy != null;
             setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
         }
@@ -134,7 +141,7 @@ public class PortfolioActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 handleNavigationItemSelected(item);
-                drawerLayout.closeDrawer(navigationView);
+//                drawerLayout.closeDrawer(navigationView);
                 return true;
             }
         });
@@ -142,7 +149,6 @@ public class PortfolioActivity extends AppCompatActivity {
 
     private boolean handleNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        // TODO: Implement the navigation items
 
         if (id == R.id.nav_about_app) {
             // Retrieve the app version from BuildConfig
@@ -214,6 +220,7 @@ public class PortfolioActivity extends AppCompatActivity {
         // Set chart data
         List<DataEntry> dataEntries = new ArrayList<>();
         String[] assets = selectedStrategy.keySet().toArray(new String[0]);
+        // values are allocations
         int[] values = selectedStrategy.values().stream().mapToInt(i -> i).toArray();
         // convert values from percentages to absolute values
         for (int i = 0; i < values.length; i++) {
@@ -259,7 +266,7 @@ public class PortfolioActivity extends AppCompatActivity {
         strategiesMap = gson.fromJson(strategiesJson, new TypeToken<Map<String, Map<String, Integer>>>(){}.getType());
         // userPortfolio is a Map where each key is an asset name and the value is the current value of the asset
         userPortfolio = gson.fromJson(userPortfolioJson, new TypeToken<Map<String, Integer>>(){}.getType());
-
+        // TODO: Parse user info from Firestore
         assert strategiesMap != null;
         // We can get the portfolio options by getting the keys of the strategiesMap
         portfolioStrategiesList.addAll(strategiesMap.keySet());
