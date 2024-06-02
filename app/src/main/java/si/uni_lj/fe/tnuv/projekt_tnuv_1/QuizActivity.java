@@ -136,10 +136,11 @@ public class QuizActivity extends AppCompatActivity {
                 userInfo.add(finalI);
                 if (progress == numberOfQuestions - 1) {
                     // Last question
-                    // Create an Intent to start PortfolioActivity
-                    prefetchAndStartPortfolioActivity();
+                    // Create an Intent to start MainActivity (Loading Screen)
+                    Intent intent = new Intent(QuizActivity.this, MainActivity.class);
                     Toast.makeText(this, "Quiz completed:" + userInfo, Toast.LENGTH_SHORT).show();
                     storeUserInfoToFiresStore();
+                    startActivity(intent);
                     return;
                 }
                 quizProgressBar.setProgress((100 / (numberOfQuestions + 1)) * (progress + 2));
@@ -163,6 +164,11 @@ public class QuizActivity extends AppCompatActivity {
         Map<String, Object> data = new HashMap<>();
         data.put("userInfo", userInfo);
 
+        // Add the 'portfolio' field
+        Map<String, Integer> portfolio = new HashMap<>();
+        portfolio.put("Cash", 100);
+        data.put("portfolio", portfolio);
+
         db.collection("users").document(userId).set(data).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "User info stored", Toast.LENGTH_SHORT).show();
@@ -172,35 +178,4 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
     }
-    /**
-     * This method prefetches the data needed for the PortfolioActivity and starts the activity.
-     * The data is fetched from Firestore and stored in a list.
-     * The list is passed to the PortfolioActivity as an extra in the Intent.
-     */
-    private void prefetchAndStartPortfolioActivity() {
-        Toast.makeText(this, "Fetching data...", Toast.LENGTH_SHORT).show();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("strategies").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                Map<String, Map<String, Object>> documentsMap = new HashMap<>();
-                for (DocumentSnapshot document : documents) {
-                    documentsMap.put(document.getId(), document.getData());
-                }
-
-                Gson gson = new Gson();
-                String json = gson.toJson(documentsMap);
-                // Once the data is fetched, start PortfolioActivity
-                Intent intent = new Intent(this, PortfolioActivity.class);
-                //  Pass the fetched data to PortfolioActivity
-                intent.putExtra("strategies", json);
-                startActivity(intent);
-                finish();
-            } else {
-                // Handle the error
-                Toast.makeText(this, "Error fetching data", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
 }

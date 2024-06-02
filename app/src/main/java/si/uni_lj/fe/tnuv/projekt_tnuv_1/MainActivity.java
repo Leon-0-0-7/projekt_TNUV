@@ -29,11 +29,6 @@ public class MainActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            // User is signed in, navigate to the next activity
-            Intent intent = new Intent(MainActivity.this, PortfolioActivity.class);
-//            Intent intent = new Intent(MainActivity.this, QuizActivity.class);
-            startActivity(intent);
-            finish();
             prefetchAndStartPortfolioActivity();
         } else {
             // User is signed out, navigate to the login activity
@@ -42,15 +37,18 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
     }
-    // TODO: Move this method to a separate class
     /**
-     * This method prefetches the data needed for the PortfolioActivity and starts the activity.
-     * The data is fetched from Firestore and stored in a list.
-     * The list is passed to the PortfolioActivity as an extra in the Intent.
+     * Fetches the data from Firestore and starts the PortfolioActivity.
+     * The data is passed to PortfolioActivity as a JSON string.
+     * The data is fetched from the Firestore collection "strategies".
+     * The data is a map of strategy names to strategy data.
      */
     private void prefetchAndStartPortfolioActivity() {
-        Toast.makeText(this, "Fetching data...", Toast.LENGTH_SHORT).show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = currentUser != null ? currentUser.getUid() : null;
+
+        // Fetch strategies data
         db.collection("strategies").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<DocumentSnapshot> documents = task.getResult().getDocuments();
@@ -59,17 +57,43 @@ public class MainActivity extends AppCompatActivity {
                     documentsMap.put(document.getId(), document.getData());
                 }
 
-                Gson gson = new Gson();
-                String json = gson.toJson(documentsMap);
-                // Once the data is fetched, start PortfolioActivity
-                Intent intent = new Intent(this, PortfolioActivity.class);
-                //  Pass the fetched data to PortfolioActivity
-                intent.putExtra("strategies", json);
-                startActivity(intent);
-                finish();
+                // Fetch portfolio data
+                if (userId != null) {
+                    db.collection("users").document(userId).get().addOnCompleteListener(userTask -> {
+                        if (userTask.isSuccessful()) {
+
+                            DocumentSnapshot userDocument = userTask.getResult();
+                            Map<String, Object> portfolio = null;
+
+                            if (userDocument != null && userDocument.exists()) {
+                                portfolio = (Map<String, Object>) userDocument.get("portfolio");
+                                if (portfolio != null) {
+                                    documentsMap.put("Current Portfolio", portfolio);
+                                }
+                            }
+
+                            // Convert the data to JSON and start PortfolioActivity
+                            Gson gson = new Gson();
+
+                            String jsonStrategies = gson.toJson(documentsMap);
+                            String jsonPortfolio = gson.toJson(portfolio);
+
+                            Intent intent = new Intent(this, PortfolioActivity.class);
+
+                            intent.putExtra("strategies", jsonStrategies);
+                            intent.putExtra("portfolio", jsonPortfolio);
+
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            // Handle the error
+                            Toast.makeText(this, "Error fetching portfolio data", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             } else {
                 // Handle the error
-                Toast.makeText(this, "Error fetching data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error fetching strategy data", Toast.LENGTH_SHORT).show();
             }
         });
     }

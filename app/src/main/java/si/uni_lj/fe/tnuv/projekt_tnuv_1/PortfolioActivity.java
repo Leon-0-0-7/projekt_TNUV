@@ -12,11 +12,14 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.anychart.AnyChart;
@@ -28,22 +31,25 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PortfolioActivity extends AppCompatActivity {
-    List<String> portfolioOptionsList = new ArrayList<>();
-    int[] percentage = new int[4];
+    List<String> portfolioStrategiesList = new ArrayList<>();
+    Map<String, Integer> userPortfolio;
     Map<String, Map<String, Integer>> strategiesMap;
-    AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
-
+    AutoCompleteTextView autoCompleteText;
     // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
     ArrayList<AssetModel> assetModels = new ArrayList<>();
+
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private RecyclerView recyclerView;
@@ -57,7 +63,7 @@ public class PortfolioActivity extends AppCompatActivity {
         setContentView(R.layout.nav_portfolio_activity);
 
         // Get the portfolio options from the Intent
-        getPortfolioData();
+        getDataFromFirestore();
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -67,6 +73,18 @@ public class PortfolioActivity extends AppCompatActivity {
         setUpDropdownMenu();
         setUpPieChart();
         setUpNavigationView();
+
+        // TODO: Use quiz results to determine the default portfolio option
+        if(!portfolioStrategiesList.isEmpty()){
+            // Default to the first portfolio option
+            Map<String, Integer> selectedStrategy = strategiesMap.get(portfolioStrategiesList.get(0));
+            autoCompleteText.setText(portfolioStrategiesList.get(0), false);
+            assert selectedStrategy != null;
+            setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "No portfolio strategies found.", Toast.LENGTH_SHORT).show();
+        }
 
         // Set the chart data and asset models for the first portfolio option
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayout);
@@ -91,14 +109,14 @@ public class PortfolioActivity extends AppCompatActivity {
 
     private void setUpDropdownMenu() {
         autoCompleteText = findViewById(R.id.auto_complete_text);
-        adapterItems = new ArrayAdapter<>(this, R.layout.list_item, portfolioOptionsList);
+        adapterItems = new ArrayAdapter<>(this, R.layout.list_item, portfolioStrategiesList);
         autoCompleteText.setAdapter(adapterItems);
         autoCompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, android.view.View view, int position, long id) {
                 String selected_item_from_dd_menu = parent.getItemAtPosition(position).toString();
                 Map<String, Integer> selectedStrategy = strategiesMap.get(selected_item_from_dd_menu);
-                Toast.makeText(getApplicationContext(), "Selected " + selectedStrategy + " portfolio.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Selected " + selectedStrategy + " portfolio.", Toast.LENGTH_SHORT).show();
                 assert selectedStrategy != null;
                 setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
             }
@@ -122,10 +140,74 @@ public class PortfolioActivity extends AppCompatActivity {
         });
     }
 
-    private void handleNavigationItemSelected(MenuItem item) {
+    private boolean handleNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         // TODO: Implement the navigation items
+
+        if (id == R.id.nav_about_app) {
+            // Retrieve the app version from BuildConfig
+
+            PackageInfo pInfo = null;
+            try {
+                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            String version = pInfo.versionName;//Version Name
+            int verCode = pInfo.versionCode;//Version Code
+            String message = "App version " + version + "\nCode version: " + verCode;
+
+            // Display the Toast message with longer duration
+            Toast.makeText(PortfolioActivity.this, message, Toast.LENGTH_LONG).show();
+            return true;
+
+        } else if (id == R.id.nav_home) {
+            // Handle the home action
+            // Start Main Activity
+            Intent intent = new Intent(PortfolioActivity.this, MainActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_portfolio_1) { // TODO: Change to dynamic portfolio handling
+            // Show right portfolio
+            Toast.makeText(PortfolioActivity.this, "Portfolio 1", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_logout) {
+            // Create an AlertDialog.Builder instance
+            AlertDialog.Builder builder = new AlertDialog.Builder(PortfolioActivity.this);
+            builder.setTitle("Logout");
+            builder.setMessage("Are you sure you want to logout?");
+
+            // Set the positive (Yes) button
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Handle the logout action
+                    // Sign out the user
+                    FirebaseAuth.getInstance().signOut();
+                    // Start the login activity
+                    Intent intent = new Intent(PortfolioActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+            // Set the negative (No) button
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Close the dialog
+                    dialog.dismiss();
+                }
+            });
+
+            // Create and show the dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+        drawerLayout.closeDrawer(navigationView);
+        return true;
+
     }
+
 
     private void setChartDataAndAssetModels(Map<String, Integer> selectedStrategy, Pie pie, AM_RecyclerViewAdapter adapter) {
         // Set chart data
@@ -133,9 +215,23 @@ public class PortfolioActivity extends AppCompatActivity {
         String[] assets = selectedStrategy.keySet().toArray(new String[0]);
         int[] values = selectedStrategy.values().stream().mapToInt(i -> i).toArray();
 
+        // assign the remaining percetages to Cash or Other (if asset is not present in current strategy)
+        int total = 0;
+        int otherValue = 0;
+        for (Map.Entry<String, Integer> entry : userPortfolio.entrySet()) {
+            String asset = entry.getKey();
+            int value = entry.getValue();
+            if (!selectedStrategy.containsKey(asset) && !asset.equals("Cash")) {
+                otherValue += value;
+            } else if (!asset.equals("Cash")){ // Cash is not included in the total
+                total += value;
+            }
+        }
+
         for (int i = 0; i < assets.length; i++) {
             dataEntries.add(new ValueDataEntry(assets[i], values[i]));
         }
+
         pie.data(dataEntries);
         pie.legend(false);
         pie.innerRadius(30);
@@ -145,30 +241,49 @@ public class PortfolioActivity extends AppCompatActivity {
         if (assetModels.size() != assets.length) {
             assetModels.clear();
             for (int i = 0; i < assets.length; i++) {
-                assetModels.add(new AssetModel(assets[i], values[i], 0));
+                int currentValue = userPortfolio.getOrDefault(assets[i], 0);
+                // TODO: MAKE THIS PRETTIER
+                if(assets[i].equals("Cash"))
+                    assetModels.add(new AssetModel(assets[i], values[i], 100 - total - otherValue));
+                else if(assets[i].equals("Other"))
+                    assetModels.add(new AssetModel(assets[i], values[i], otherValue));
+                else
+                    assetModels.add(new AssetModel(assets[i], values[i], currentValue));
             }
             adapter.notifyDataSetChanged();
         }
         else{
             for (int i = 0; i < assets.length; i++) {
-                assetModels.set(i, new AssetModel(assets[i], values[i], 0));
+                int currentValue = userPortfolio.getOrDefault(assets[i], 0);
+                // TODO: MAKE THIS PRETTIER
+                if(assets[i].equals("Cash"))
+                    assetModels.set(i, new AssetModel(assets[i], values[i], 100 - total - otherValue));
+                else if(assets[i].equals("Other"))
+                    assetModels.set(i, new AssetModel(assets[i], values[i], otherValue));
+                else
+                    assetModels.set(i, new AssetModel(assets[i], values[i], currentValue));
                 adapter.notifyItemChanged(i);
             }
         }
     }
 
-    private void getPortfolioData() {
+    private void getDataFromFirestore() {
         // Retrieve the fetched data from the Intent
         Intent intent = getIntent();
         String strategiesJson = intent.getStringExtra("strategies");
+        String userPortfolioJson = intent.getStringExtra("portfolio");
         // Parse the JSON string to get the strategies
         Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, Map<String, Integer>>>(){}.getType();
-        strategiesMap = gson.fromJson(strategiesJson, type);
 
-        // Now, strategiesMap is a Map where each key is a strategy name and the value is another Map representing the assets and their allocations
-        // We can get the portfolio options by getting the keys of the strategiesMap
+        // strategiesMap is a Map where each key is a strategy name and the value is another Map representing the assets and their allocations
+        strategiesMap = gson.fromJson(strategiesJson, new TypeToken<Map<String, Map<String, Integer>>>(){}.getType());
+        // userPortfolio is a Map where each key is an asset name and the value is the current value of the asset
+        userPortfolio = gson.fromJson(userPortfolioJson, new TypeToken<Map<String, Integer>>(){}.getType());
+
         assert strategiesMap != null;
-        portfolioOptionsList.addAll(strategiesMap.keySet());
+        // We can get the portfolio options by getting the keys of the strategiesMap
+        portfolioStrategiesList.addAll(strategiesMap.keySet());
     }
+
+
 }
