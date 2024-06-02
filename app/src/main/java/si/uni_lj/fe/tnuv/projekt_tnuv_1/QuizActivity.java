@@ -3,7 +3,6 @@ package si.uni_lj.fe.tnuv.projekt_tnuv_1;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -178,26 +177,23 @@ public class QuizActivity extends AppCompatActivity {
      * The data is fetched from Firestore and stored in a list.
      * The list is passed to the PortfolioActivity as an extra in the Intent.
      */
-    // TODO: FINISH THIS FUNCTION
     private void prefetchAndStartPortfolioActivity() {
         Toast.makeText(this, "Fetching data...", Toast.LENGTH_SHORT).show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("strategies").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                ArrayList<Map<String, Object>> allDocuments = new ArrayList<>();
+                Map<String, Map<String, Object>> documentsMap = new HashMap<>();
                 for (DocumentSnapshot document : documents) {
-                    allDocuments.add(document.getData());
+                    documentsMap.put(document.getId(), document.getData());
                 }
 
                 Gson gson = new Gson();
-                String json = gson.toJson(allDocuments);
+                String json = gson.toJson(documentsMap);
                 // Once the data is fetched, start PortfolioActivity
                 Intent intent = new Intent(this, PortfolioActivity.class);
-                // Pass the fetched data to PortfolioActivity
+                //  Pass the fetched data to PortfolioActivity
                 intent.putExtra("strategies", json);
-//                intent.putStringArrayListExtra("assetAllocationList", new ArrayList<>(assetAllocationList));
-//                intent.putStringArrayListExtra("assetList", new ArrayList<>(assetList));
                 startActivity(intent);
                 finish();
             } else {
