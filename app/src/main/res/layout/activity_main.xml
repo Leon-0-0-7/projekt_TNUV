@@ -22,18 +22,24 @@
         android:layout_marginBottom="10dp"
         android:src="@drawable/cashsensei_text_logo" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_create_plan"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/napis_create_plan"
-        android:background="@drawable/btn_rectangular"
-        android:width="300dp"
-        android:textAllCaps="false"
-        android:textColor="@color/btn_text_light_mode"
-        android:layout_marginBottom="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="@string/loading"
+        android:gravity="center"/>
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/btn_create_plan"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/napis_create_plan"-->
+<!--        android:background="@drawable/btn_rectangular"-->
+<!--        android:width="300dp"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="@color/btn_text_light_mode"-->
+<!--        android:layout_marginBottom="150dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </LinearLayout>
