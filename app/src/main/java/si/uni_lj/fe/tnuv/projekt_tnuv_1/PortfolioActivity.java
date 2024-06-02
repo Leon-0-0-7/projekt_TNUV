@@ -102,7 +102,7 @@ public class PortfolioActivity extends AppCompatActivity {
 
     private void setUpRecyclerView() {
         recyclerView = findViewById(R.id.recyclerView);
-        am_recyclerViewAdapter = new AM_RecyclerViewAdapter(this, assetModels);
+        am_recyclerViewAdapter = new AM_RecyclerViewAdapter(this, assetModels, userPortfolio);
         recyclerView.setAdapter(am_recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -159,6 +159,7 @@ public class PortfolioActivity extends AppCompatActivity {
 
             // Display the Toast message with longer duration
             Toast.makeText(PortfolioActivity.this, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(PortfolioActivity.this, "User ID: " + Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Toast.LENGTH_SHORT).show();
             return true;
 
         } else if (id == R.id.nav_home) {
