@@ -74,6 +74,10 @@ public class AM_RecyclerViewAdapter extends RecyclerView.Adapter<AM_RecyclerView
             assetValueEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // return if view holder is for asset "Other"
+                    if (getBindingAdapterPosition() == assetModels.size() - 1) {
+                        return;
+                    }
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     // Inflate the custom layout
                     LayoutInflater inflater = LayoutInflater.from(context);
