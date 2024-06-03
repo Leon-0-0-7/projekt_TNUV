@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -15,12 +16,16 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.anychart.AnyChart;
@@ -28,6 +33,7 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
+import com.anychart.core.ui.Label;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.reflect.TypeToken;
@@ -37,6 +43,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,9 +81,9 @@ public class PortfolioActivity extends AppCompatActivity {
 
         // Initializations
         setUpRecyclerView();
-        setUpDropdownMenu();
         setUpPieChart();
         setUpNavigationView();
+        setUpDropdownMenu();
 
         // TODO: Use quiz results to determine the default portfolio option
         if(!portfolioStrategiesList.isEmpty()){
@@ -88,12 +95,14 @@ public class PortfolioActivity extends AppCompatActivity {
             // portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
             // Default to the first portfolio option
             autoCompleteText.setText(portfolioStrategiesList.get(recommended), false);
+          
             assert selectedStrategy != null;
             setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
         }
         else{
             Toast.makeText(getApplicationContext(), "No portfolio strategies found.", Toast.LENGTH_SHORT).show();
         }
+
 
         // Set the chart data and asset models for the first portfolio option
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayout);
@@ -137,6 +146,7 @@ public class PortfolioActivity extends AppCompatActivity {
         anyChartView = findViewById(R.id.any_chart_view);
         anyChartView.setChart(pie);
     }
+
 
     private void setUpNavigationView() {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -234,9 +244,15 @@ public class PortfolioActivity extends AppCompatActivity {
             dataEntries.add(new ValueDataEntry(assets[i], values[i]));
         }
 
+        Label centerLabel = pie.label(0);
+        centerLabel.text("Budget " + budget + "€");
+        centerLabel.offsetX("50%");
+        centerLabel.offsetY("50%");
+        centerLabel.anchor("center");
+
         pie.data(dataEntries);
         pie.legend(false);
-        pie.innerRadius(30);
+        pie.innerRadius(60);
         pie.background().fill("#ECEEF6");
 
         // Set up asset models
@@ -275,6 +291,7 @@ public class PortfolioActivity extends AppCompatActivity {
         assert strategiesMap != null;
         // We can get the portfolio options by getting the keys of the strategiesMap
         portfolioStrategiesList.addAll(strategiesMap.keySet());
+        Collections.sort(portfolioStrategiesList);
     }
 
 
