@@ -84,7 +84,8 @@ public class PortfolioActivity extends AppCompatActivity {
             int recommended = portfolioStrategiesList.indexOf(chosenPortfolio);
 
             Map<String, Integer> selectedStrategy = strategiesMap.get(portfolioStrategiesList.get(recommended));
-            portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
+            // Add a checkmark to the recommended portfolio
+            // portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
             // Default to the first portfolio option
             autoCompleteText.setText(portfolioStrategiesList.get(recommended), false);
             assert selectedStrategy != null;
