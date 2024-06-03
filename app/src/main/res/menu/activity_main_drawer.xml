@@ -17,5 +17,9 @@
             android:id="@+id/nav_about_app"
             android:icon="@drawable/ic_menu_settings"
             android:title="@string/menu_about_app" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_baseline_person_24"
+            android:title="@string/logout" />
     </group>
 </menu>
