@@ -44,7 +44,19 @@
         android:spinnersShown="true"
         android:datePickerMode="spinner"
         android:layout_gravity="center"/>
-
+    <EditText
+        android:id="@+id/budgetEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Enter your budget"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="50dp"
+        android:width="100dp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:drawableRight="@drawable/ic_baseline_euro_24"
+        android:drawablePadding="10dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_confirm"
@@ -57,7 +69,10 @@
         android:textColor="@color/btn_text_light_mode"
         android:layout_marginHorizontal="50dp"
         android:layout_marginVertical="5dp"
+        android:layout_gravity="center"
         />
+
+
 
     <LinearLayout
         android:id="@+id/answersLayout"

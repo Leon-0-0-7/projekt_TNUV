@@ -1,20 +1,26 @@
 package si.uni_lj.fe.tnuv.projekt_tnuv_1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -43,6 +49,9 @@ public class QuizActivity extends AppCompatActivity {
     private Button confirmButton;
     private DatePicker datePick;
     private List<Question> questions = new ArrayList<>();
+    private EditText budgetEditText;
+    boolean validTransition = false;
+    boolean isBudgetQuestion = false;
 
     /**
      * This method is called when the activity is starting.
@@ -58,7 +67,7 @@ public class QuizActivity extends AppCompatActivity {
         questionTextView = findViewById(R.id.quizQuestion);
         confirmButton = findViewById(R.id.btn_confirm);
         datePick = findViewById(R.id.birthDatePicker);
-
+        budgetEditText = findViewById(R.id.budgetEditText);
         questionTextView.setText("What is your birth date?");
         // Load questions from Firestore
         loadQuestionsfromFireStore();
@@ -68,17 +77,24 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Handle confirm button click
                 // Update progress bar
-                quizProgressBar.setProgress(100 / (numberOfQuestions + 1));
+                if(!isBudgetQuestion){
+                    quizProgressBar.setProgress(100 / (numberOfQuestions + 1));
 
-                // Hide the date picker and confirm button
-                datePick.setVisibility(View.GONE);
-                confirmButton.setVisibility(View.GONE);
-                // Add the user's birth date to the userInfo list
-                userInfo.add(datePick.getYear());
+                    // Hide the date picker and confirm button
+                    datePick.setVisibility(View.GONE);
+                    budgetEditText.setVisibility(View.VISIBLE);
+                    questionTextView.setText("What is your investment budget?");
+                    // Add the user's birth date to the userInfo list
+                    userInfo.add(datePick.getYear());
 
-                quizProgressText.setText("Warming up!");
-
-                setQuestion(questions.get(0));
+                    quizProgressText.setText("Warming up!");
+                    isBudgetQuestion = true;
+                } else {
+                    budgetEditText.setVisibility(View.GONE);
+                    confirmButton.setVisibility(View.GONE);
+                    userInfo.add(Integer.parseInt(budgetEditText.getText().toString()));
+                    setQuestion(questions.get(0));
+                }
             }
         });
 
@@ -137,6 +153,7 @@ public class QuizActivity extends AppCompatActivity {
                 if (progress == numberOfQuestions - 1) {
                     // Last question
                     // Create an Intent to start MainActivity (Loading Screen)
+                    validTransition = true;
                     Intent intent = new Intent(QuizActivity.this, MainActivity.class);
                     Toast.makeText(this, "Quiz completed:" + userInfo, Toast.LENGTH_SHORT).show();
                     storeUserInfoToFiresStore();
