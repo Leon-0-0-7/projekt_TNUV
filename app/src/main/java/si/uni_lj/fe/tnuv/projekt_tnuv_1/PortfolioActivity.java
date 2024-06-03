@@ -53,6 +53,8 @@ public class PortfolioActivity extends AppCompatActivity {
     List<String> portfolioStrategiesList = new ArrayList<>();
     Map<String, Integer> userPortfolio;
     Map<String, Map<String, Integer>> strategiesMap;
+    Map<String, Integer> selectedStrategy;
+    String recommendedPortfolio;
     Map<String, String> userInfo;
     ArrayAdapter<String> adapterItems;
     AutoCompleteTextView autoCompleteText;
@@ -85,19 +87,8 @@ public class PortfolioActivity extends AppCompatActivity {
         setUpNavigationView();
         setUpDropdownMenu();
 
-        // TODO: Use quiz results to determine the default portfolio option
         if(!portfolioStrategiesList.isEmpty()){
-            String chosenPortfolio = userInfo.get("Recommended portfolio");
-            int recommended = portfolioStrategiesList.indexOf(chosenPortfolio);
-
-            Map<String, Integer> selectedStrategy = strategiesMap.get(portfolioStrategiesList.get(recommended));
-            // Add a checkmark to the recommended portfolio
-            // portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
-            // Default to the first portfolio option
-            autoCompleteText.setText(portfolioStrategiesList.get(recommended), false);
-          
-            assert selectedStrategy != null;
-            setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
+            setRecommendedPortfolio();
         }
         else{
             Toast.makeText(getApplicationContext(), "No portfolio strategies found.", Toast.LENGTH_SHORT).show();
@@ -176,7 +167,7 @@ public class PortfolioActivity extends AppCompatActivity {
             String message = "App version " + version + "\nCode version: " + verCode;
 
             // Display the Toast message with longer duration
-            Toast.makeText(PortfolioActivity.this, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(PortfolioActivity.this, message, Toast.LENGTH_SHORT).show();
             Toast.makeText(PortfolioActivity.this, "User ID: " + Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), Toast.LENGTH_SHORT).show();
             return true;
 
@@ -187,7 +178,8 @@ public class PortfolioActivity extends AppCompatActivity {
             startActivity(intent);
         } else if (id == R.id.nav_portfolio_1) { // TODO: Change to dynamic portfolio handling
             // Show right portfolio
-            Toast.makeText(PortfolioActivity.this, "Portfolio 1", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PortfolioActivity.this, "Recommended portfolio: " + recommendedPortfolio, Toast.LENGTH_SHORT).show();
+            setRecommendedPortfolio();
         } else if (id == R.id.nav_logout) {
             // Create an AlertDialog.Builder instance
             AlertDialog.Builder builder = new AlertDialog.Builder(PortfolioActivity.this);
@@ -216,7 +208,6 @@ public class PortfolioActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-
             // Create and show the dialog
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -294,5 +285,12 @@ public class PortfolioActivity extends AppCompatActivity {
         Collections.sort(portfolioStrategiesList);
     }
 
-
+    public void setRecommendedPortfolio(){
+        recommendedPortfolio = userInfo.get("Recommended portfolio");
+        int recommended = portfolioStrategiesList.indexOf(recommendedPortfolio);
+        selectedStrategy = strategiesMap.get(portfolioStrategiesList.get(recommended));
+        autoCompleteText.setText(portfolioStrategiesList.get(recommended), false);
+        assert selectedStrategy != null;
+        setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
+    }
 }

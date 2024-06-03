@@ -13,7 +13,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="menu_home">Home/Refresh</string>
-    <string name="menu_portfilo_name">Portfolio 1</string>
+    <string name="menu_portfilo_name">My Portfolio</string>
     <string name="menu_about_app">About app</string>
     <string name="btn_login">Login</string>
     <string name="btn_create_account">Create account</string>

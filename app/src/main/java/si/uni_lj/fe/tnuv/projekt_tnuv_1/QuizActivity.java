@@ -123,7 +123,7 @@ public class QuizActivity extends AppCompatActivity {
                         numberOfQuestions = qs.size();
                     }
                 }
-                Toast.makeText(this, "Questions loaded", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "Questions loaded", Toast.LENGTH_SHORT).show();
             } else {
                 // Handle errors
                 Toast.makeText(this, "Failed to load questions", Toast.LENGTH_SHORT).show();
@@ -158,7 +158,7 @@ public class QuizActivity extends AppCompatActivity {
                     Intent intent = new Intent(QuizActivity.this, MainActivity.class);
                     // Calculate recommended portfolio after the last question and store value in the user info
                     userInfo.put("Recommended portfolio", calculateRecommendedPortfolio());
-                    Toast.makeText(this, "Quiz completed:" + userInfo, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(this, "Quiz completed:" + userInfo, Toast.LENGTH_SHORT).show();
                     storeUserInfoToFiresStore();
                     startActivity(intent);
                     return;
@@ -191,7 +191,7 @@ public class QuizActivity extends AppCompatActivity {
 
         db.collection("users").document(userId).set(data).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(this, "User info stored", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(this, "User info stored", Toast.LENGTH_SHORT).show();
             } else {
                 // Handle errors
                 Toast.makeText(this, "Failed to store user info", Toast.LENGTH_SHORT).show();
@@ -222,7 +222,6 @@ public class QuizActivity extends AppCompatActivity {
                         }
                     });
         }
-
         // Start MainActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -237,26 +236,28 @@ public class QuizActivity extends AppCompatActivity {
     private String calculateRecommendedPortfolio() {
         int budget = Integer.parseInt(userInfo.get("Budget"));
         int weightedSum = 0;
+        int weight=10;
+        int min_budget = 2500;
 
         // Improved loop by replacing manual index manipulation with enhanced for loop
-        for (int i = 2; i < user_answers.size(); i++) {
-            weightedSum += user_answers.get(i) * 10;  // Simplified accumulation
+        for (int i = 0; i < user_answers.size(); i++) {
+            weightedSum += user_answers.get(i) * weight;  // Simplified accumulation
         }
 
         // Determine the portfolio name based on budget and weightedSum
         String recommendedPortfolioName;  // Default value set here
-        if (budget <= 2500) {
+        if (budget <= min_budget) {
             recommendedPortfolioName = "Basic";
-        } else if (weightedSum <= 10) {
+        } else if (weightedSum <= weight) {
             recommendedPortfolioName = "Conservative";
-        } else if (weightedSum > 30) {
+        } else if (weightedSum > user_answers.size()*weight) {
             recommendedPortfolioName = "Aggressive";
         } else {
             recommendedPortfolioName = "Moderate";
         }
 
         // Display a toast with the portfolio type
-        Toast.makeText(this, recommendedPortfolioName, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Recommended portfolio for you: " + recommendedPortfolioName, Toast.LENGTH_LONG).show();
 
         // Return the string corresponding to the recommended portfolio, or return default Moderate
         return recommendedPortfolioName;
