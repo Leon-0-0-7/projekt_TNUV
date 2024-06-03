@@ -44,7 +44,8 @@ public class QuizActivity extends AppCompatActivity {
     private TextView quizProgressText;
     private int progress = 0;
     private int numberOfQuestions;
-    private List<Integer> userInfo = new ArrayList<>();
+    Map<String, String> userInfo = new HashMap<>();
+    public List<Integer> user_answers = new ArrayList<>();
     private TextView questionTextView;
     private Button confirmButton;
     private DatePicker datePick;
@@ -85,14 +86,14 @@ public class QuizActivity extends AppCompatActivity {
                     budgetEditText.setVisibility(View.VISIBLE);
                     questionTextView.setText("What is your investment budget?");
                     // Add the user's birth date to the userInfo list
-                    userInfo.add(datePick.getYear());
+                    userInfo.put("Date of birth", String.valueOf(datePick.getYear()));
 
                     quizProgressText.setText("Warming up!");
                     isBudgetQuestion = true;
                 } else {
                     budgetEditText.setVisibility(View.GONE);
                     confirmButton.setVisibility(View.GONE);
-                    userInfo.add(Integer.parseInt(budgetEditText.getText().toString()));
+                    userInfo.put("Budget", String.valueOf(Integer.parseInt(budgetEditText.getText().toString())));
                     setQuestion(questions.get(0));
                 }
             }
@@ -133,7 +134,7 @@ public class QuizActivity extends AppCompatActivity {
     /**
      * This method sets the current question to be displayed in the UI.
      * It creates a button for each answer and sets up a click listener for each button.
-     * When an answer button is clicked, the index of the answer is added to the userInfo list,
+     * When an answer button is clicked, the index of the answer is added to the answers list,
      * the progress bar is updated, and the next question is set.
      */
     private void setQuestion(Question question) {
@@ -149,12 +150,14 @@ public class QuizActivity extends AppCompatActivity {
             final int finalI = i;
             // Handle answer button click
             answerButton.setOnClickListener(view -> {
-                userInfo.add(finalI);
+                user_answers.add(finalI);
                 if (progress == numberOfQuestions - 1) {
                     // Last question
                     // Create an Intent to start MainActivity (Loading Screen)
                     validTransition = true;
                     Intent intent = new Intent(QuizActivity.this, MainActivity.class);
+                    // Calculate recommended portfolio after the last question and store value in the user info
+                    userInfo.put("Recommended portfolio", calculateRecommendedPortfolio());
                     Toast.makeText(this, "Quiz completed:" + userInfo, Toast.LENGTH_SHORT).show();
                     storeUserInfoToFiresStore();
                     startActivity(intent);
@@ -224,5 +227,38 @@ public class QuizActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish(); // This will finish the current activity (QuizActivity)
+    }
+
+
+    /**
+     * This method calculates the recommended portfolio based on the user's answers.
+     * The user's answers are stored in the userInfo list.
+     */
+    private String calculateRecommendedPortfolio() {
+        int budget = user_answers.get(1);
+        int weightedSum = 0;
+
+        // Improved loop by replacing manual index manipulation with enhanced for loop
+        for (int i = 2; i < user_answers.size(); i++) {
+            weightedSum += user_answers.get(i) * 10;  // Simplified accumulation
+        }
+
+        // Determine the portfolio name based on budget and weightedSum
+        String recommendedPortfolioName;  // Default value set here
+        if (budget <= 2500) {
+            recommendedPortfolioName = "Basic";
+        } else if (weightedSum <= 10) {
+            recommendedPortfolioName = "Conservative";
+        } else if (weightedSum > 30) {
+            recommendedPortfolioName = "Aggressive";
+        } else {
+            recommendedPortfolioName = "Moderate";
+        }
+
+        // Display a toast with the portfolio type
+        Toast.makeText(this, recommendedPortfolioName, Toast.LENGTH_SHORT).show();
+
+        // Return the string corresponding to the recommended portfolio, or return default Moderate
+        return recommendedPortfolioName;
     }
 }
