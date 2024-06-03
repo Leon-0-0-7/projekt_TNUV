@@ -37,6 +37,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -233,7 +234,7 @@ public class PortfolioActivity extends AppCompatActivity {
 
         pie.data(dataEntries);
         pie.legend(false);
-        pie.innerRadius(30);
+        pie.innerRadius(50);
         pie.background().fill("#ECEEF6");
 
         // Set up asset models
@@ -270,6 +271,7 @@ public class PortfolioActivity extends AppCompatActivity {
         assert strategiesMap != null;
         // We can get the portfolio options by getting the keys of the strategiesMap
         portfolioStrategiesList.addAll(strategiesMap.keySet());
+        Collections.sort(portfolioStrategiesList);
     }
 
 
