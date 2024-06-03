@@ -43,6 +43,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -246,6 +247,18 @@ public class PortfolioActivity extends AppCompatActivity {
         pie.innerRadius(60);
         pie.background().fill("#ECEEF6");
 
+        // Create a copy of the userPortfolio map
+        Map<String, Integer> remainingAssets = new HashMap<>(userPortfolio);
+
+        // Remove all entries from the copied map that are present in the selectedStrategy map
+        for (String asset : assets) {
+            remainingAssets.remove(asset);
+        }
+
+        // Calculate the cumulative value of all assets not present in the current strategy
+        int otherValue = remainingAssets.values().stream().mapToInt(i -> i).sum();
+
+
         // Set up asset models
         if (assetModels.size() != assets.length) {
             assetModels.clear();
@@ -253,6 +266,8 @@ public class PortfolioActivity extends AppCompatActivity {
                 int currentValue = userPortfolio.getOrDefault(assets[i], 0);
                 assetModels.add(new AssetModel(assets[i], values[i], currentValue));
             }
+            // Add the "Other" asset model
+            assetModels.add(new AssetModel("Other", 0, otherValue));
             adapter.notifyDataSetChanged();
         }
         else{
@@ -261,6 +276,8 @@ public class PortfolioActivity extends AppCompatActivity {
                 assetModels.get(i).setCurrentValue(currentValue);
                 adapter.notifyItemChanged(i);
             }
+            assetModels.get(assets.length).setCurrentValue(otherValue);
+            adapter.notifyItemChanged(assets.length);
         }
     }
 
