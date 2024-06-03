@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
 
                             if (userDocument != null && userDocument.exists()) {
                                 portfolio = (Map<String, Object>) userDocument.get("portfolio");
-                                if (portfolio != null) {
-                                    documentsMap.put("Current Portfolio", portfolio);
-                                }
+//                                if (portfolio != null) {
+//                                    documentsMap.put("Current Portfolio", portfolio);
+//                                }
                             }
 
                             // Convert the data to JSON and start PortfolioActivity

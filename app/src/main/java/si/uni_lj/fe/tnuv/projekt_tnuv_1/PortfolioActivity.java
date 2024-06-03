@@ -79,13 +79,13 @@ public class PortfolioActivity extends AppCompatActivity {
 
         // TODO: Use quiz results to determine the default portfolio option
         if(!portfolioStrategiesList.isEmpty()){
-            String chosenPortfolio = "Risky";
+            String chosenPortfolio = "Aggresive";
             int recommended = portfolioStrategiesList.indexOf(chosenPortfolio);
-
-            portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
+//
+//            portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
             // Default to the first portfolio option
             Map<String, Integer> selectedStrategy = strategiesMap.get(portfolioStrategiesList.get(0));
-            autoCompleteText.setText(portfolioStrategiesList.get(recommended), false);
+            autoCompleteText.setText(portfolioStrategiesList.get(0), false);
             assert selectedStrategy != null;
             setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
         }
