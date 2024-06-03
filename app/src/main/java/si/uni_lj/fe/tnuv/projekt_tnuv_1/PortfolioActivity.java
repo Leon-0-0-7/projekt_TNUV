@@ -339,7 +339,7 @@ public class PortfolioActivity extends AppCompatActivity {
                 assetModels.get(i).setCurrentValue(currentValue);
                 adapter.notifyItemChanged(i);
             }
-            assetModels.get(assets.length).setCurrentValue(otherValue);
+            assetModels.get(assets.length-1).setCurrentValue(otherValue);
             adapter.notifyItemChanged(assets.length);
         }
     }
