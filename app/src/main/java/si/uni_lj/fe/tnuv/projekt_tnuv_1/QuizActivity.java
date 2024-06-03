@@ -178,4 +178,34 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (validTransition) {
+            return;
+        }
+        // Delete the current user
+        // This depends on how you're storing the current user
+        // For example, if you're using SharedPreferences, you can do something like this:
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            user.delete()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+//                                Toast.makeText(QuizActivity.this, "User account deleted.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(QuizActivity.this, "Failed to delete user account.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+
+        // Start MainActivity
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish(); // This will finish the current activity (QuizActivity)
+    }
 }
