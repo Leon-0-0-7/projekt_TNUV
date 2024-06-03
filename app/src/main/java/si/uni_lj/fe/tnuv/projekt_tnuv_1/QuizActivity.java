@@ -186,7 +186,7 @@ public class QuizActivity extends AppCompatActivity {
 
         // Add the 'portfolio' field
         Map<String, Integer> portfolio = new HashMap<>();
-        portfolio.put("Cash", 100);
+        portfolio.put("Cash", Integer.valueOf(userInfo.get("Budget")));
         data.put("portfolio", portfolio);
 
         db.collection("users").document(userId).set(data).addOnCompleteListener(task -> {
@@ -235,7 +235,7 @@ public class QuizActivity extends AppCompatActivity {
      * The user's answers are stored in the userInfo list.
      */
     private String calculateRecommendedPortfolio() {
-        int budget = user_answers.get(1);
+        int budget = Integer.parseInt(userInfo.get("Budget"));
         int weightedSum = 0;
 
         // Improved loop by replacing manual index manipulation with enhanced for loop

@@ -52,7 +52,7 @@ public class PortfolioActivity extends AppCompatActivity {
     // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
     ArrayList<AssetModel> assetModels = new ArrayList<>();
     // TODO: Add budget to question
-    int budget = 10000;
+    int budget = 0;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private RecyclerView recyclerView;
@@ -224,6 +224,7 @@ public class PortfolioActivity extends AppCompatActivity {
         // values are allocations
         int[] values = selectedStrategy.values().stream().mapToInt(i -> i).toArray();
         // convert values from percentages to absolute values
+        budget = Integer.parseInt(userInfo.get("Budget"));
         for (int i = 0; i < values.length; i++) {
             values[i] = values[i] * budget / 100;
         }
