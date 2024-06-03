@@ -65,6 +65,7 @@ public class PortfolioActivity extends AppCompatActivity {
     private AM_RecyclerViewAdapter am_recyclerViewAdapter;
     private Pie pie;
     private AnyChartView anyChartView;
+    private boolean isPortfolioView = false;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -264,6 +265,9 @@ public class PortfolioActivity extends AppCompatActivity {
                 }
             });
             dialog.show();
+        } else if( id == R.id.nav_change_pie_chart){
+            isPortfolioView = !isPortfolioView;
+            setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
         }
 
         drawerLayout.closeDrawer(navigationView);
@@ -295,15 +299,26 @@ public class PortfolioActivity extends AppCompatActivity {
             values[i] = values[i] * budget / 100;
         }
 
-        for (int i = 0; i < assets.length; i++) {
-            dataEntries.add(new ValueDataEntry(assets[i], values[i]));
-        }
-
         Label centerLabel = pie.label(0);
-        centerLabel.text("Budget " + budget + "€");
         centerLabel.offsetX("50%");
         centerLabel.offsetY("50%");
         centerLabel.anchor("center");
+
+        if (isPortfolioView){
+            // Calculate the cumulative value of all assets in user portfolio
+            int cumulativeValue = userPortfolio.values().stream().mapToInt(i -> i).sum();
+
+            for (int i = 0; i < assets.length; i++) {
+                dataEntries.add(new ValueDataEntry(assets[i], userPortfolio.getOrDefault(assets[i], 0)));
+            }
+            centerLabel.text("Value: " + cumulativeValue + "€");
+
+        } else {
+            for (int i = 0; i < assets.length; i++) {
+                dataEntries.add(new ValueDataEntry(assets[i], values[i]));
+            }
+            centerLabel.text("Budget " + budget + "€");
+        }
 
         pie.data(dataEntries);
         pie.legend(false);
@@ -343,7 +358,6 @@ public class PortfolioActivity extends AppCompatActivity {
             adapter.notifyItemChanged(assets.length);
         }
     }
-
     private void getDataFromFirestore() {
         // Retrieve the fetched data from the Intent
         Intent intent = getIntent();

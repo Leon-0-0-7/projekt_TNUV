@@ -22,6 +22,10 @@
             android:icon="@drawable/ic_baseline_attach_money_24"
             android:title="@string/change_budget" />
         <item
+            android:id="@+id/nav_change_pie_chart"
+            android:icon="@drawable/ic_baseline_change_circle_24"
+            android:title="Toggle pie chart" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_baseline_person_24"
             android:title="@string/logout" />
