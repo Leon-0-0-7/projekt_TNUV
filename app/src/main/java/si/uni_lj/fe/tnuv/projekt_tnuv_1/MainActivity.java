@@ -64,8 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
                             DocumentSnapshot userDocument = userTask.getResult();
                             Map<String, Object> portfolio = null;
+                            Map<String, String> userInfo = null;
 
                             if (userDocument != null && userDocument.exists()) {
+                                userInfo = (Map<String, String>) userDocument.get("userInfo");
                                 portfolio = (Map<String, Object>) userDocument.get("portfolio");
 //                                if (portfolio != null) {
 //                                    documentsMap.put("Current Portfolio", portfolio);
@@ -77,11 +79,13 @@ public class MainActivity extends AppCompatActivity {
 
                             String jsonStrategies = gson.toJson(documentsMap);
                             String jsonPortfolio = gson.toJson(portfolio);
+                            String jsonUserData = gson.toJson(userInfo);
 
                             Intent intent = new Intent(this, PortfolioActivity.class);
 
                             intent.putExtra("strategies", jsonStrategies);
                             intent.putExtra("portfolio", jsonPortfolio);
+                            intent.putExtra("userInfo", jsonUserData);
 
                             startActivity(intent);
                             finish();

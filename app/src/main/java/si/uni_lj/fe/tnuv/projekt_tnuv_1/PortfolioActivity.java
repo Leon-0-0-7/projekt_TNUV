@@ -53,12 +53,13 @@ public class PortfolioActivity extends AppCompatActivity {
     List<String> portfolioStrategiesList = new ArrayList<>();
     Map<String, Integer> userPortfolio;
     Map<String, Map<String, Integer>> strategiesMap;
+    Map<String, String> userInfo;
     ArrayAdapter<String> adapterItems;
     AutoCompleteTextView autoCompleteText;
     // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
     ArrayList<AssetModel> assetModels = new ArrayList<>();
     // TODO: Add budget to question
-    int budget = 10000;
+    int budget = 0;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private RecyclerView recyclerView;
@@ -86,13 +87,15 @@ public class PortfolioActivity extends AppCompatActivity {
 
         // TODO: Use quiz results to determine the default portfolio option
         if(!portfolioStrategiesList.isEmpty()){
-//            String chosenPortfolio = "Basic";
-//            int recommended = portfolioStrategiesList.indexOf(chosenPortfolio);
-////
-//            // Default to the first portfolio option
-//            portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
-            Map<String, Integer> selectedStrategy = strategiesMap.get(portfolioStrategiesList.get(0));
-            autoCompleteText.setText(portfolioStrategiesList.get(0), false);
+            String chosenPortfolio = userInfo.get("Recommended portfolio");
+            int recommended = portfolioStrategiesList.indexOf(chosenPortfolio);
+
+            Map<String, Integer> selectedStrategy = strategiesMap.get(portfolioStrategiesList.get(recommended));
+            // Add a checkmark to the recommended portfolio
+            // portfolioStrategiesList.set(recommended, chosenPortfolio + " \uD83D\uDCAB");
+            // Default to the first portfolio option
+            autoCompleteText.setText(portfolioStrategiesList.get(recommended), false);
+          
             assert selectedStrategy != null;
             setChartDataAndAssetModels(selectedStrategy, pie, am_recyclerViewAdapter);
         }
@@ -232,6 +235,7 @@ public class PortfolioActivity extends AppCompatActivity {
         // values are allocations
         int[] values = selectedStrategy.values().stream().mapToInt(i -> i).toArray();
         // convert values from percentages to absolute values
+        budget = Integer.parseInt(userInfo.get("Budget"));
         for (int i = 0; i < values.length; i++) {
             values[i] = values[i] * budget / 100;
         }
@@ -274,6 +278,7 @@ public class PortfolioActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String strategiesJson = intent.getStringExtra("strategies");
         String userPortfolioJson = intent.getStringExtra("portfolio");
+        String userInfoJson = intent.getStringExtra("userInfo");
         // Parse the JSON string to get the strategies
         Gson gson = new Gson();
 
@@ -281,7 +286,8 @@ public class PortfolioActivity extends AppCompatActivity {
         strategiesMap = gson.fromJson(strategiesJson, new TypeToken<Map<String, Map<String, Integer>>>(){}.getType());
         // userPortfolio is a Map where each key is an asset name and the value is the current value of the asset
         userPortfolio = gson.fromJson(userPortfolioJson, new TypeToken<Map<String, Integer>>(){}.getType());
-        // TODO: Parse user info from Firestore
+        userInfo = gson.fromJson(userInfoJson, new TypeToken<Map<String, String>>(){}.getType());
+
         assert strategiesMap != null;
         // We can get the portfolio options by getting the keys of the strategiesMap
         portfolioStrategiesList.addAll(strategiesMap.keySet());
