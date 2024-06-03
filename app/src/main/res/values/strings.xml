@@ -26,4 +26,5 @@
     <string name="portfolio_asset">Asset</string>
     <string name="portfolio_target">Target</string>
     <string name="portfolio_current">Current</string>
+    <string name="change_budget">Change budget</string>
 </resources>
