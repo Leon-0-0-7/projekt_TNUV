@@ -14,12 +14,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,11 +37,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -151,6 +147,7 @@ public class PortfolioActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private boolean handleNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -212,6 +209,61 @@ public class PortfolioActivity extends AppCompatActivity {
             // Create and show the dialog
             AlertDialog dialog = builder.create();
             dialog.show();
+        } else if(id == R.id.nav_change_budget){
+            // create an alert dialog with alert
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            // Inflate the custom layout
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.current_value_dialog, null);
+            // Set the custom layout to the AlertDialog builder
+            builder.setView(dialogView);
+            // Get the EditText and ImageViews from the custom layout
+            EditText input = dialogView.findViewById(R.id.dialog_edit_text);
+            ImageView crossImage = dialogView.findViewById(R.id.cross_image);
+            ImageView arrowImage = dialogView.findViewById(R.id.arrow_image);
+
+            // Create and show the AlertDialog
+            AlertDialog dialog = builder.create();
+            Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(R.drawable.rounded_dialog);
+            // Set an OnClickListener on the cross ImageView
+            crossImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Dismiss the dialog
+                    dialog.dismiss();
+                }
+            });
+            // Set an OnClickListener on the arrow ImageView
+            arrowImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int newValue;
+                    if (input.getText().toString().isEmpty()) {
+                        newValue = 0;
+                    } else {
+                        newValue = Integer.parseInt(input.getText().toString());
+                    }
+                    // Update the budget in the userInfo map
+                    userInfo.put("Budget", String.valueOf(newValue));
+                    // Update the budget in the Firestore
+                    updateFirestoreBudget(String.valueOf(newValue));
+                    setRecommendedPortfolio();
+                    // Dismiss the dialog
+                    dialog.dismiss();
+                }
+            });
+            input.setText(budget + "");
+            // Request focus on the EditText and show the keyboard
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            input.requestFocus();
+            input.post(new Runnable() {
+                @Override
+                public void run() {
+                    InputMethodManager inputMethodManager = (InputMethodManager) PortfolioActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
+            dialog.show();
         }
 
         drawerLayout.closeDrawer(navigationView);
@@ -219,6 +271,17 @@ public class PortfolioActivity extends AppCompatActivity {
 
     }
 
+    private void updateFirestoreBudget(String budget) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        db.collection("users").document(userId).update("userInfo.Budget", budget).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+//                Toast.makeText(PortfolioActivity.this, "Data updated successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(PortfolioActivity.this, "Failed to update data", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void setChartDataAndAssetModels(Map<String, Integer> selectedStrategy, Pie pie, AM_RecyclerViewAdapter adapter) {
         // Set chart data
