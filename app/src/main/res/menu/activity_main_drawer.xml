@@ -7,24 +7,24 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
-            android:title="@string/menu_home" />
-        <item
+            android:title="@string/menu_portfilo_name" />
+        <!-- Deprecated: Not needed in current verision. -->
+        <!--<item
             android:id="@+id/nav_portfolio_1"
             android:icon="@drawable/ic_menu_pie"
-            android:title="@string/menu_portfilo_name" />
-        <!-- TODO: Change to dynamic portfolio handling -->
+            android:title="@string/menu_portfilo_name" /> -->
         <item
-            android:id="@+id/nav_about_app"
-            android:icon="@drawable/ic_menu_settings"
-            android:title="@string/menu_about_app" />
+            android:id="@+id/nav_change_pie_chart"
+            android:icon="@drawable/ic_baseline_change_circle_24"
+            android:title="@string/toggle_pie_chart" />
         <item
             android:id="@+id/nav_change_budget"
             android:icon="@drawable/ic_baseline_attach_money_24"
             android:title="@string/change_budget" />
         <item
-            android:id="@+id/nav_change_pie_chart"
-            android:icon="@drawable/ic_baseline_change_circle_24"
-            android:title="Toggle pie chart" />
+            android:id="@+id/nav_about_app"
+            android:icon="@drawable/ic_menu_settings"
+            android:title="@string/menu_about_app" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_baseline_person_24"
