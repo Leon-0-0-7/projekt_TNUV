@@ -38,7 +38,7 @@
         style="@style/EditTextStyle"
         android:hint="@string/password"
         android:textColor="@color/text_light_gray"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:inputType="textPassword"
         android:layout_width="300dp"
         android:drawableStart="@drawable/ic_baseline_lock_24"
@@ -56,7 +56,7 @@
         android:textAllCaps="false"
         android:textSize="16dp"
         android:textColor="@color/btn_text_light_mode"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -65,10 +65,10 @@
         android:id="@+id/tv_create_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:text="@string/login"
         android:textColor="@color/text_light_gray"
         android:layout_marginBottom="90dp"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
 </LinearLayout>
