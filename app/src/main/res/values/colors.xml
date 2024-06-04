@@ -11,7 +11,7 @@
     <color name="btn_text_light_mode">#FFFFFFFF</color>
     <color name="text_light_gray">#8791B0</color>
     <color name="top_bar_blue">#30437A</color>
-    <color name="btn_green">#00FFA9</color>
-    <color name="btn_red">#FF0056</color>
-    <color name="alert_light">#596995</color>
+    <color name="btn_green">#F7F8FF</color>
+    <color name="btn_red">#F7F8FF</color>
+    <color name="alert_light">#30437A</color>
 </resources>

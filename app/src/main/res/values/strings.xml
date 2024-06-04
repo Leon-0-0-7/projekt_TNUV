@@ -28,4 +28,5 @@
     <string name="portfolio_current">Current</string>
     <string name="change_budget">Change Budget</string>
     <string name="toggle_pie_chart">Toggle Pie Chart</string>
+    <string name="enter_new_value">Enter new value:</string>
 </resources>
