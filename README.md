@@ -12,7 +12,7 @@ Smart. Simple. Accurate. CashSensei.
 - Data Storage: The app uses Firebase Firestore as a NoSQL database to store user data, including portfolio and strategy information and also initial questions.  
 - Portfolio Management: Users can view their current portfolio, including the distribution of assets. They can also update their portfolio, such as changing the budget for a specific asset.  
 - Strategy Management: The app provides various investment strategies for users to choose from. Users can view the asset distribution for each strategy and select a strategy to apply to their portfolio.  
-- Interactive UI: The app features an interactive Pie chart to visualize the distribution of assets in the user's portfolio or a selected strategy. The Pie chart can be toggled between displaying portfolio data and strategy data.  
+- Interactive UI: The app features an interactive Pie chart to visualize the distribution of assets in the user's portfolio or a selected strategy. The Pie chart can be toggled between displaying current portfolio data and target strategy data.  
 - Data Prefetching: The app prefetches data from Firestore on startup to improve performance and responsiveness.
 
 ![CashSensei](https://github.com/Leon-0-0-7/projekt_TNUV/blob/main/app/src/main/res/drawable/cashsensei_logo.png?raw=true)
