@@ -33,4 +33,15 @@
     <string name="confirm">Confirm</string>
     <string name="question">Question</string>
     <string name="answer1">Answer1</string>
+    <string name="current_value">Current Value</string>
+    <string name="target_value">Target Value</string>
+    <string name="asset">Asset</string>
+    <string name="what_is_your_investment_budget">What is your investment budget?</string>
+    <string name="what_is_your_birth_date">What is your birth date?</string>
+    <string name="warming_up">Warming up!</string>
+    <string name="value">"Value: "</string>
+    <string name="budget">"Budget "</string>
+    <string name="are_you_sure_you_want_to_logout">Are you sure you want to logout?</string>
+    <string name="logout_dialog">Logout</string>
+    <string name="recommended_portfolio">"Recommended portfolio: "</string>
 </resources>

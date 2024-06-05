@@ -69,7 +69,7 @@ public class QuizActivity extends AppCompatActivity {
         confirmButton = findViewById(R.id.btn_confirm);
         datePick = findViewById(R.id.birthDatePicker);
         budgetEditText = findViewById(R.id.budgetEditText);
-        questionTextView.setText("What is your birth date?");
+        questionTextView.setText(getString(R.string.what_is_your_birth_date));
         // Load questions from Firestore
         loadQuestionsfromFireStore();
 
@@ -87,9 +87,9 @@ public class QuizActivity extends AppCompatActivity {
                     userInfo.put("Date of birth", String.valueOf(datePick.getYear()));
                     // Show the budget question
                     budgetEditText.setVisibility(View.VISIBLE);
-                    questionTextView.setText("What is your investment budget?");
+                    questionTextView.setText(getString(R.string.what_is_your_investment_budget));
 
-                    quizProgressText.setText("Warming up!");
+                    quizProgressText.setText(getString(R.string.warming_up));
                     isBudgetQuestion = true;
                 } else {
                     budgetEditText.setVisibility(View.GONE);

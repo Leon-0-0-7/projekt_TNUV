@@ -57,7 +57,6 @@ public class PortfolioActivity extends AppCompatActivity {
     AutoCompleteTextView autoCompleteText;
     // Create an ArrayList of AssetModel objects, this will hold the models for the assets, that we will send to recycler viewer
     ArrayList<AssetModel> assetModels = new ArrayList<>();
-    // TODO: Add budget to question
     int budget = 0;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -173,14 +172,14 @@ public class PortfolioActivity extends AppCompatActivity {
         } else if (id == R.id.nav_home) {
             // Handle the home action
             // Start Main Activity
-            Toast.makeText(PortfolioActivity.this, "Recommended portfolio: " + recommendedPortfolio, Toast.LENGTH_LONG).show();
+            Toast.makeText(PortfolioActivity.this, getString(R.string.recommended_portfolio) + recommendedPortfolio, Toast.LENGTH_LONG).show();
             Intent intent = new Intent(PortfolioActivity.this, MainActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             // Create an AlertDialog.Builder instance
             AlertDialog.Builder builder = new AlertDialog.Builder(PortfolioActivity.this);
-            builder.setTitle("Logout");
-            builder.setMessage("Are you sure you want to logout?");
+            builder.setTitle(getString(R.string.logout_dialog));
+            builder.setMessage(getString(R.string.are_you_sure_you_want_to_logout));
 
             // Set the positive (Yes) button
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -308,13 +307,13 @@ public class PortfolioActivity extends AppCompatActivity {
             for (int i = 0; i < assets.length; i++) {
                 dataEntries.add(new ValueDataEntry(assets[i], userPortfolio.getOrDefault(assets[i], 0)));
             }
-            centerLabel.text("Value: " + cumulativeValue + "€");
+            centerLabel.text(getString(R.string.value) + cumulativeValue + "€");
 
         } else {
             for (int i = 0; i < assets.length; i++) {
                 dataEntries.add(new ValueDataEntry(assets[i], values[i]));
             }
-            centerLabel.text("Budget " + budget + "€");
+            centerLabel.text(getString(R.string.budget) + budget + "€");
         }
 
         pie.data(dataEntries);
