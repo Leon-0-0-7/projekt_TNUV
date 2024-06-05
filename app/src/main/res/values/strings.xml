@@ -26,5 +26,11 @@
     <string name="portfolio_asset">Asset</string>
     <string name="portfolio_target">Target</string>
     <string name="portfolio_current">Current</string>
-    <string name="change_budget">Change budget</string>
+    <string name="change_budget">Change Budget</string>
+    <string name="toggle_pie_chart">Toggle Pie Chart</string>
+    <string name="enter_new_value">Enter new value:</string>
+    <string name="enter_your_budget">Enter your budget</string>
+    <string name="confirm">Confirm</string>
+    <string name="question">Question</string>
+    <string name="answer1">Answer1</string>
 </resources>

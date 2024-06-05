@@ -83,10 +83,11 @@ public class QuizActivity extends AppCompatActivity {
 
                     // Hide the date picker and confirm button
                     datePick.setVisibility(View.GONE);
-                    budgetEditText.setVisibility(View.VISIBLE);
-                    questionTextView.setText("What is your investment budget?");
                     // Add the user's birth date to the userInfo list
                     userInfo.put("Date of birth", String.valueOf(datePick.getYear()));
+                    // Show the budget question
+                    budgetEditText.setVisibility(View.VISIBLE);
+                    questionTextView.setText("What is your investment budget?");
 
                     quizProgressText.setText("Warming up!");
                     isBudgetQuestion = true;

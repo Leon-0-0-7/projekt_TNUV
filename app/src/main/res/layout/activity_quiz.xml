@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
         android:indeterminate="false"
-
         android:minHeight="20dp"
         />
 
@@ -30,14 +29,15 @@
         android:id="@+id/quizQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Question"
+        android:text="@string/question"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
+        android:textSize="17sp"
         />
 
     <DatePicker
         android:id="@+id/birthDatePicker"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:calendarViewShown="false"
@@ -49,10 +49,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:hint="Enter your budget"
+        android:hint="@string/enter_your_budget"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginHorizontal="50dp"
-        android:width="100dp"
+        android:width="70dp"
         android:visibility="gone"
         android:gravity="center"
         android:drawableRight="@drawable/ic_baseline_euro_24"
@@ -62,17 +63,16 @@
         android:id="@+id/btn_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirm"
+        android:text="@string/confirm"
         android:background="@drawable/btn_rectangular"
         android:width="300dp"
+        android:textSize="@dimen/answer_text_size"
         android:textAllCaps="false"
         android:textColor="@color/btn_text_light_mode"
         android:layout_marginHorizontal="50dp"
         android:layout_marginVertical="5dp"
         android:layout_gravity="center"
         />
-
-
 
     <LinearLayout
         android:id="@+id/answersLayout"

@@ -173,12 +173,9 @@ public class PortfolioActivity extends AppCompatActivity {
         } else if (id == R.id.nav_home) {
             // Handle the home action
             // Start Main Activity
+            Toast.makeText(PortfolioActivity.this, "Recommended portfolio: " + recommendedPortfolio, Toast.LENGTH_LONG).show();
             Intent intent = new Intent(PortfolioActivity.this, MainActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_portfolio_1) { // TODO: Change to dynamic portfolio handling
-            // Show right portfolio
-            Toast.makeText(PortfolioActivity.this, "Recommended portfolio: " + recommendedPortfolio, Toast.LENGTH_SHORT).show();
-            setRecommendedPortfolio();
         } else if (id == R.id.nav_logout) {
             // Create an AlertDialog.Builder instance
             AlertDialog.Builder builder = new AlertDialog.Builder(PortfolioActivity.this);
