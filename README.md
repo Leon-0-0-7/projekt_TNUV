@@ -1,52 +1,18 @@
 # Financial assistant app - CashSensei
-## TO DO
-- on resume
-- database (shranjevanje portfelja) -> firebase
-- burger menu
-- dinamično generiranje vprašanj
-## Pages
-### Main page -> "Create plan"
-
-### Questionnaire -> age, budget, time span zapakiran v finančni cilj (glej spodaj)
-#### Time span
-- pokojnina
-- nakup avta
-- telefon čez dva meseca
-
-#### Other ideas for questions
-risk level, asset classes, custom percentages
-
-### Plan page —> dropdown with options(risk, time span), list with assets (current + target)
-- Sidebar menu with portfolios/plans (list plans with option to create new with same function as "Create plan" button)
-
-## [Figma](https://www.figma.com/file/R1OqUWKKdN9H1ydhyqyGeF/Finance-Era%3A-Financial-Management-Mobile-App-(Community)?type=design&node-id=0-1&mode=design&t=JQ6s5jMKwHiMR6w2-0)
-
-## Graf HTA - lucid charts
-https://lucid.app/lucidchart/08e65580-6f88-4b83-9cfc-be73d8066c9c/edit?viewport_loc=-1134%2C-515%2C4039%2C1978%2C0_0&invitationId=inv_1134d149-1892-4881-a2c2-86d2e598ef45
-
-## Tutoriali:
-How to push android studio project to github in 2022
-
-(https://www.youtube.com/watch?v=XIHNxES2hbQ)
-
-How To Fix Support For Password Authentication Was Removed On GitHub
-
-https://www.youtube.com/watch?v=ePCBuIQJAUc
-
-### Opis iz infineon delavnice
-
-The purpose of this conversation is to present you our mobile app and invite you to start using it.
-The successful output will be if you start using it.
-
-
-(Persona: nima investicij, knows what it is)
-
-Most of people read on the internet about investing, knows that they should invest, wants to, but in the world full of noise is is hard to get clear idea how to start or how to improve your investing.
+Most people read on the internet about investing, knowing that they should invest and want to invest, but in the world full of noise is is hard to get clear idea on how to start or how to improve your investing.
 We offer you app that gives you optimal investments strategies based on your age, budget, investment timeframe and other factors.
 
-App helps you start investing, manage your portfolio in easy way and suggest you impovements.
-It is like financial advisor or teacher in your pocket.
-Get your finance in order before shit hits the fan.
-Install cashsensei.
+App helps you start investing, manage your portfolio in an easy way and suggest you impovements.
+It's like financial advisor or investment sensei in your pocket.
 
-Smart. Simple. Accurate. Cashsensei.
+Smart. Simple. Accurate. CashSensei.
+
+## Features
+- User Authentication: The app uses Firebase Authentication to manage user accounts. Users can sign in to access their personal portfolio data.  
+- Data Storage: The app uses Firebase Firestore as a NoSQL database to store user data, including portfolio and strategy information and also initial questions.  
+- Portfolio Management: Users can view their current portfolio, including the distribution of assets. They can also update their portfolio, such as changing the budget for a specific asset.  
+- Strategy Management: The app provides various investment strategies for users to choose from. Users can view the asset distribution for each strategy and select a strategy to apply to their portfolio.  
+- Interactive UI: The app features an interactive Pie chart to visualize the distribution of assets in the user's portfolio or a selected strategy. The Pie chart can be toggled between displaying portfolio data and strategy data.  
+- Data Prefetching: The app prefetches data from Firestore on startup to improve performance and responsiveness.
+
+![CashSensei](https://github.com/Leon-0-0-7/projekt_TNUV/blob/main/app/src/main/res/drawable/cashsensei_logo.png?raw=true)
